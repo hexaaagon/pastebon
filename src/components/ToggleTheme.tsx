@@ -2,10 +2,11 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, LucideProps } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export function ToggleTheme() {
+export function ToggleTheme({ ...props }: LucideProps) {
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
 
@@ -13,9 +14,7 @@ export function ToggleTheme() {
     setMounted(true);
   }, []);
 
-  if (!mounted) {
-    return null;
-  }
+  if (!mounted) return <Skeleton className="h-9 w-9" />;
 
   return (
     <Button
@@ -24,7 +23,7 @@ export function ToggleTheme() {
       }
       size="icon"
     >
-      {resolvedTheme === "dark" ? <Sun /> : <Moon />}
+      {resolvedTheme === "dark" ? <Sun {...props} /> : <Moon {...props} />}
     </Button>
   );
 }
