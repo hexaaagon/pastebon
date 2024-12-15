@@ -57,6 +57,9 @@ export const theme = {
     },
     fontFamily: {
       sans: ["var(--font-sans)", ...fontFamily.sans],
+      geist: ["var(--font-geist-sans)", ...fontFamily.sans],
+      mono: ["var(--font-geist-mono)", ...fontFamily.mono],
+      grotesque: ["var(--font-grotesque)", ...fontFamily.sans],
     },
     keyframes: {
       "accordion-down": {

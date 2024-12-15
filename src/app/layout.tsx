@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
+
+import Head from "next/head";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { cn } from "@/lib/utils";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,7 +39,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${grotesque.variable} ${geistSans.className} antialiased`}
+        className={cn(
+          `${geistSans.variable} ${geistMono.variable} ${grotesque.variable}`,
+          "font-geist antialiased",
+        )}
         suppressHydrationWarning
       >
         <ThemeProvider>{children}</ThemeProvider>
