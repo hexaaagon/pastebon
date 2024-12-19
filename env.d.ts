@@ -17,6 +17,9 @@ declare global {
       POSTGRES_DATABASE: string;
       SUPABASE_SERVICE_ROLE_KEY: string;
       POSTGRES_HOST: string;
+
+      // Options
+      HIDE_DOCS_NAVIGATION?: "true" | "false";
     }
   }
 }

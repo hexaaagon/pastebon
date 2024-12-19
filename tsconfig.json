@@ -20,7 +20,8 @@
     ],
     "typeRoots": ["./env.d.ts"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "contentlayer/generated": ["./.contentlayer/generated"]
     },
     "baseUrl": "./"
   },
@@ -30,7 +31,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "next.config.ts",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    ".contentlayer/generated"
   ],
   "exclude": ["node_modules"]
 }
