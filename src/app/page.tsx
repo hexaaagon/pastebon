@@ -22,7 +22,7 @@ export default function Landing() {
   const { resolvedTheme } = useTheme();
 
   function formatCode(force = false): any {
-    if (code.split("").length > 1000000 && !force)
+    if (code.length > 1000000 && !force)
       return toast.warning("Are you sure?", {
         duration: 10000,
         description: "The code you've put is too long. (>1.000.000 chars)",
