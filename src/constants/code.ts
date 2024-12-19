@@ -1,7 +1,7 @@
 import { type Options as PrettierOptions } from "prettier";
 import prettierParserBabel from "prettier/plugins/babel";
 import prettierParserTypescript from "prettier/plugins/typescript";
-import * as prettierPluginEstree from "prettier/plugins/estree";
+import prettierPluginEstree from "prettier/plugins/estree";
 
 export const languages: {
   [key: string]: string | undefined;

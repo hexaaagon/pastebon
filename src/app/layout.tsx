@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 
 const geistSans = localFont({

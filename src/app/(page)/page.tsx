@@ -2,7 +2,7 @@
 import { type editor as MonacoEditor } from "monaco-editor";
 import { format as prettierFormat } from "prettier/standalone";
 import prettierPluginTypescript from "prettier/plugins/typescript";
-import * as prettierPluginEstree from "prettier/plugins/estree";
+import prettierPluginEstree from "prettier/plugins/estree";
 
 import { useTheme } from "next-themes";
 import { Suspense, useEffect, useState } from "react";
