@@ -1,5 +1,5 @@
 {
-  "id": "4c4ec65c-889a-408d-be99-a2fe768654a7",
+  "id": "7f6b99ac-b4a5-4837-9bab-227a5b778b17",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,8 +14,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "password": {
-          "name": "password",
+        "admin_password": {
+          "name": "admin_password",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -38,11 +38,11 @@
             "id"
           ]
         },
-        "paste_password_unique": {
-          "name": "paste_password_unique",
+        "paste_admin_password_unique": {
+          "name": "paste_admin_password_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "password"
+            "admin_password"
           ]
         }
       },

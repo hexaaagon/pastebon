@@ -1,10 +1,10 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 
-/** @type {import('tailwindcss').Config} */
 export const darkMode = ["class"];
 export const content = [
   "src/app/**/*.{ts,tsx}",
   "src/components/**/*.{ts,tsx}",
+  "src/content/**/*.{ts,tsx,mdx}",
 ];
 export const theme = {
   container: {
@@ -88,4 +88,5 @@ export const theme = {
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 export const plugins = [require("tailwindcss-animate")];

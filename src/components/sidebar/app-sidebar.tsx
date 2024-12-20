@@ -7,6 +7,7 @@ import Link from "next/link";
 import { BookOpen, ScrollText, Settings } from "lucide-react";
 
 import { NavMain } from "@/components/sidebar/nav-main";
+import { NavDocs } from "@/components/sidebar/nav-docs";
 import {
   Sidebar,
   SidebarContent,
@@ -36,7 +37,12 @@ const data = {
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  type,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & {
+  type: "default" | "docs";
+}) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -44,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="text-sidebar-primary-foreground mx-auto ml-1 flex aspect-square size-6 items-center justify-center rounded-lg">
+                <div className="mx-auto ml-1 flex aspect-square size-6 items-center justify-center rounded-lg text-sidebar-primary-foreground">
                   <Image
                     src="/static/images/logo-light.png"
                     alt="Pastebon Logo"
@@ -73,7 +79,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain projects={data.navMain} />
+        <NavMain />
+        {type === "docs" && <NavDocs />}
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenuButton asChild size="sm" tooltip="Settings">

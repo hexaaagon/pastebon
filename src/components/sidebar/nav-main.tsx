@@ -1,6 +1,5 @@
 "use client";
-
-import { type LucideIcon } from "lucide-react";
+import { config } from "@/config/navigation";
 import Link from "next/link";
 
 import {
@@ -13,30 +12,22 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-export function NavMain({
-  projects,
-}: {
-  projects: {
-    name: string;
-    url: string;
-    icon: LucideIcon;
-  }[];
-}) {
-  return (
-    <SidebarGroup>
+export function NavMain() {
+  return config.main.map((nav) => (
+    <SidebarGroup key={nav.title}>
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
         <SidebarMenuItem>
-          {projects.map((item) => (
-            <SidebarMenuButton asChild key={item.name} tooltip={item.name}>
-              <Link href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
+          {nav.items.map((item) => (
+            <SidebarMenuButton asChild key={item.title} tooltip={item.title}>
+              <Link href={item.href}>
+                {item.icon && <item.icon />}
+                <span>{item.title}</span>
               </Link>
             </SidebarMenuButton>
           ))}
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
-  );
+  ));
 }

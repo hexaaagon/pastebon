@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { NavItem, NavItemWithChildren } from "@/types/nav";
 
 import { Button } from "@/components/ui/button";
-import { docsConfig } from "@/constants/docs";
+import { config } from "@/config/navigation";
 
 interface DocsPagerProps {
   doc: Doc;
@@ -40,7 +40,7 @@ export function DocsPager({ doc }: DocsPagerProps) {
 }
 
 export function getPagerForDoc(doc: Doc) {
-  const nav = docsConfig.sidebarNav;
+  const nav = config.docs;
   const flattenedLinks = [null, ...flatten(nav), null];
   const activeIndex = flattenedLinks.findIndex(
     (link) => doc.slug === link?.href,

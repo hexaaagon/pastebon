@@ -1,18 +1,19 @@
-import Icons from "lucide-react";
+import { type LucideIcon } from "lucide-react";
+import { type ReactNode } from "react";
 
 export interface NavItem {
   title: string;
-  href?: string;
-  disabled?: boolean;
-  external?: boolean;
-  icon?: keyof typeof Icons;
-  label?: string;
+  href: string;
+  icon?: LucideIcon;
 }
 
 export interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[];
 }
 
-export interface MainNavItem extends NavItem {}
+export interface MainNavItem {
+  title: string;
+  items: NavItem[];
+}
 
-export interface SidebarNavItem extends NavItemWithChildren {}
+export interface DocsNavItem extends MainNavItem {}

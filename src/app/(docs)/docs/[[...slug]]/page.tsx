@@ -1,15 +1,15 @@
 import { notFound } from "next/navigation";
 import { allDocs } from "contentlayer/generated";
 
-//  import "@/styles/mdx.css";
+import "@/app/(docs)/mdx.css";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, ExternalLink } from "lucide-react";
 import Balancer from "react-wrap-balancer";
 
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { getTableOfContents } from "@/lib/toc";
 import { absoluteUrl, cn } from "@/lib/utils";
+import { MDX } from "@/components/mdx";
 import { DocsPager } from "@/components/pager";
 import { DashboardTableOfContents } from "@/components/toc";
 
@@ -118,8 +118,8 @@ export default async function DocPage({ params }: DocPageProps) {
             )}
           </div>
         ) : null}
-        <div className="pb-12 pt-8">
-          <MDXRemote source={doc.body.raw} />
+        <div className="space-y-2 pb-12 pt-8">
+          <MDX source={doc.body.raw} />
         </div>
         <DocsPager doc={doc} />
       </div>

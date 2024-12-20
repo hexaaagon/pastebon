@@ -80,6 +80,8 @@ export default function Landing() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
   return <main className="max-h-screen overflow-hidden"></main>;

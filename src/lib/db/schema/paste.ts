@@ -10,7 +10,7 @@ export const pasteTable = pgTable(
       .primaryKey()
       .unique()
       .$defaultFn(() => nanoid()),
-    password: text("password").unique().notNull(),
+    adminPassword: text("admin_password").unique().notNull(),
     storagePath: text("path").notNull(),
   },
   (t) => [
