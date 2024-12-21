@@ -84,7 +84,7 @@ export default function Landing() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
-  return <main className="max-h-screen overflow-hidden"></main>;
+  return <main className="max-h-screen overflow-hidden p-6 px-8"></main>;
 }
 
 // <CodeEditor

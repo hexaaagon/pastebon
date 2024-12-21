@@ -1,6 +1,7 @@
 "use client";
-import { config } from "@/config/navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { config } from "@/config/navigation";
 
 import {
   Collapsible,
@@ -20,20 +21,24 @@ import {
 import { ChevronRight } from "lucide-react";
 
 export function NavDocs() {
+  const pathname = usePathname();
+
   return (
-    <SidebarGroup>
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Docs</SidebarGroupLabel>
       <SidebarMenu>
         {config.docs.map((nav) => (
           <Collapsible
             key={nav.title}
             asChild
-            defaultOpen={true}
+            defaultOpen={nav.items
+              .map((val) => val.href === pathname)
+              .includes(true)}
             className="group/collapsible"
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton key={nav.title} tooltip={nav.title}>
+                <SidebarMenuButton key={nav.title}>
                   <span>{nav.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>

@@ -5,6 +5,9 @@ import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
 
+import { StoreActions, StoreType, store } from "@/lib/store";
+import { useStoreState } from "easy-peasy";
+
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -57,7 +60,7 @@ const SidebarProvider = React.forwardRef<
 >(
   (
     {
-      defaultOpen = true,
+      defaultOpen = false,
       open: openProp,
       onOpenChange: setOpenProp,
       className,
@@ -69,11 +72,15 @@ const SidebarProvider = React.forwardRef<
   ) => {
     const isMobile = useIsMobile();
     const [openMobile, setOpenMobile] = React.useState(false);
+    const storeActions = store.getActions() as StoreActions;
+    const sidebarOpen = useStoreState(
+      (state: StoreType) => state.sidebarOpened!,
+    );
 
     // This is the internal state of the sidebar.
     // We use openProp and setOpenProp for control from outside the component.
     const [_open, _setOpen] = React.useState(defaultOpen);
-    const open = openProp ?? _open;
+    const open = openProp ?? sidebarOpen ?? _open;
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
         const openState = typeof value === "function" ? value(open) : value;
@@ -83,9 +90,12 @@ const SidebarProvider = React.forwardRef<
           _setOpen(openState);
         }
 
+        storeActions.setSidebarOpen(openState);
+
         // This sets the cookie to keep the sidebar state.
         document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [setOpenProp, open],
     );
 
