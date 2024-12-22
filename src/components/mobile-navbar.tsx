@@ -10,7 +10,7 @@ export default function MobileNavbar() {
   if (!isMobile) return null;
 
   return (
-    <nav className="flex h-12 w-screen items-center justify-between border-b p-2">
+    <nav className="flex items-center justify-between overflow-x-hidden border-b p-4 transition-[padding]">
       <div className="flex items-center gap-1">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />

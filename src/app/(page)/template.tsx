@@ -12,7 +12,7 @@ export default function RootLayout({
   return (
     <SidebarProvider>
       <AppSidebar type="default" />
-      <SidebarInset>
+      <SidebarInset className="overflow-x-hidden">
         <MobileNavbar />
         {children}
       </SidebarInset>

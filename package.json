@@ -17,6 +17,7 @@
     "db:check": "drizzle-kit check"
   },
   "dependencies": {
+    "@icons-pack/react-simple-icons": "^10.2.0",
     "@monaco-editor/react": "4.7.0-rc.0",
     "@neondatabase/serverless": "^0.10.4",
     "@node-rs/argon2": "^2.0.2",

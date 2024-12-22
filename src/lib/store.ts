@@ -2,7 +2,7 @@ import { createStore, action, Action } from "easy-peasy";
 
 export const store = createStore(
   {
-    sidebarOpened: true,
+    sidebarOpened: false,
     setSidebarOpen: action(
       (state: StoreType, sidebar: StoreType["sidebarOpened"]) => {
         state.sidebarOpened = sidebar;
