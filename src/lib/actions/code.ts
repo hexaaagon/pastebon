@@ -4,6 +4,15 @@ import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { absoluteUrl } from "../utils";
 
+import {
+  schema as createSchema,
+  fileSizeLimit,
+  pasteIdLength,
+} from "@/app/api/paste/create/route";
+import { createServiceServer } from "../supabase/service-server";
+import { nanoid } from "nanoid";
+import argon2 from "@node-rs/argon2";
+
 type ActionResult =
   | {
       success: true;
@@ -46,12 +55,43 @@ export async function postCodeAction(form: FormData): Promise<ActionResult> {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   data.adminPassword && formData.append("adminPassword", data.adminPassword);
 
-  const paste = (await (
-    await fetch(`http://${absoluteUrl("/api/paste/create")}`, {
-      method: "PUT",
-      body: formData,
-    })
-  ).json()) as ActionResult;
+  const code = await createCode(createSchema.parse(formData));
 
-  return paste;
+  return code;
+}
+
+export async function createCode(
+  formData: typeof createSchema._type,
+): Promise<ActionResult> {
+  const supabase = createServiceServer();
+  const id = nanoid(pasteIdLength);
+
+  formData.adminPassword = !formData.adminPassword
+    ? nanoid(16)
+    : formData.adminPassword;
+
+  const unhashedAdminPassword = formData.adminPassword;
+
+  formData.adminPassword = await argon2.hash(formData.adminPassword);
+
+  await supabase.storage
+    .from("paste")
+    .upload(`pastes/${id}.txt`, formData.file, {
+      contentType: "text/plain",
+    });
+
+  await supabase.from("paste").insert({
+    id,
+    path: `pastes/${id}.txt`,
+    admin_password: formData.adminPassword,
+    language: formData.language,
+  });
+
+  return {
+    success: true,
+    data: {
+      id,
+      password: unhashedAdminPassword,
+    },
+  };
 }

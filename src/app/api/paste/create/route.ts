@@ -6,12 +6,13 @@ import { languageValues } from "@/config/code";
 import { createServiceServer } from "@/lib/supabase/service-server";
 import { nanoid } from "@/lib/utils";
 import argon2 from "@node-rs/argon2";
+import { createCode } from "@/lib/actions/code";
 
-const fileSizeLimit = Number(process.env.MAX_SIZE_LIMIT) || 10;
-const pasteIdLength = Number(process.env.PASTE_ID_LENGTH) || 10;
+export const fileSizeLimit = Number(process.env.MAX_SIZE_LIMIT) || 10;
+export const pasteIdLength = Number(process.env.PASTE_ID_LENGTH) || 10;
 
 const languageSchema = z.enum(languageValues);
-const schema = zfd
+export const schema = zfd
   .formData({
     file: zfd.file(),
     adminPassword: z.string().nullish(),
@@ -27,7 +28,7 @@ export async function PUT(req: Request) {
   try {
     formData = schema.parse(await req.formData());
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
     if (err instanceof z.ZodError) {
       return Response.json(
@@ -52,40 +53,14 @@ export async function PUT(req: Request) {
     }
   }
 
-  const supabase = createServiceServer();
-  const id = nanoid(pasteIdLength);
+  const code = await createCode(formData);
 
-  formData.adminPassword = !formData.adminPassword
-    ? nanoid(16)
-    : formData.adminPassword;
-
-  const unhashedAdminPassword = formData.adminPassword;
-
-  formData.adminPassword = await argon2.hash(formData.adminPassword);
-
-  await supabase.storage
-    .from("paste")
-    .upload(`pastes/${id}.txt`, formData.file, {
-      contentType: "text/plain",
+  if (!code.success)
+    return Response.json(code, {
+      status: 400,
     });
 
-  await supabase.from("paste").insert({
-    id,
-    path: `pastes/${id}.txt`,
-    admin_password: formData.adminPassword,
-    language: formData.language,
+  return Response.json(code, {
+    status: 201,
   });
-
-  return Response.json(
-    {
-      success: true,
-      data: {
-        id,
-        password: unhashedAdminPassword,
-      },
-    },
-    {
-      status: 201,
-    },
-  );
 }
