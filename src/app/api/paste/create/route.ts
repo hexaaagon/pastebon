@@ -1,32 +1,12 @@
-import { type NextApiRequest } from "next";
 import { z } from "zod";
-import { zfd } from "zod-form-data";
-
-import { languageValues } from "@/config/code";
-import { createServiceServer } from "@/lib/supabase/service-server";
-import { nanoid } from "@/lib/utils";
-import argon2 from "@node-rs/argon2";
 import { createCode } from "@/lib/actions/code";
-
-export const fileSizeLimit = Number(process.env.MAX_SIZE_LIMIT) || 10;
-export const pasteIdLength = Number(process.env.PASTE_ID_LENGTH) || 10;
-
-const languageSchema = z.enum(languageValues);
-export const schema = zfd
-  .formData({
-    file: zfd.file(),
-    adminPassword: z.string().nullish(),
-    language: languageSchema.default("plaintext"),
-  })
-  .refine((args) => args.file.size <= fileSizeLimit * 1024 * 1024, {
-    message: `File size should not exceed ${fileSizeLimit}MB`,
-  });
+import { createSchema } from "@/lib/constants";
 
 export async function PUT(req: Request) {
-  let formData: typeof schema._type;
+  let formData: typeof createSchema._type;
 
   try {
-    formData = schema.parse(await req.formData());
+    formData = createSchema.parse(await req.formData());
   } catch (err) {
     console.error(err);
 

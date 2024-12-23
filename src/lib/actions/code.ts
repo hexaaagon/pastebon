@@ -2,13 +2,9 @@
 import { languageValues } from "@/config/code";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { absoluteUrl } from "../utils";
 
-import {
-  schema as createSchema,
-  fileSizeLimit,
-  pasteIdLength,
-} from "@/app/api/paste/create/route";
+import { createSchema, pasteIdLength } from "@/lib/constants";
+
 import { createServiceServer } from "../supabase/service-server";
 import { nanoid } from "nanoid";
 import argon2 from "@node-rs/argon2";
