@@ -105,7 +105,7 @@ export const languageValues = languages.map((lang) => lang[1]) as [
   ...string[],
 ];
 
-export function parser(options: PrettierOptions): {
+export function parser(options?: PrettierOptions): {
   [key: string]: {
     provider: "prettier";
     options: PrettierOptions;

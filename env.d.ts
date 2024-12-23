@@ -4,6 +4,11 @@ declare global {
     interface ProcessEnv {
       NODE_ENV?: "development" | string;
 
+      // Options
+      MAX_SIZE_LIMIT?: string;
+      PASTE_ID_LENGTH?: string;
+      NEXT_PUBLIC_APP_URL?: string;
+
       // Supabase (Vercel)
       POSTGRES_URL: string;
       POSTGRES_PRISMA_URL: string;
@@ -18,9 +23,9 @@ declare global {
       SUPABASE_SERVICE_ROLE_KEY: string;
       POSTGRES_HOST: string;
 
-      // Options
-      MAX_SIZE_LIMIT?: string;
-      PASTE_ID_LENGTH?: string;
+      // Vercel
+      VERCEL_ENV: string;
+      VERCEL_URL: string;
     }
   }
 }

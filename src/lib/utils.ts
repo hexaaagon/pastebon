@@ -9,5 +9,5 @@ export function cn(...inputs: ClassValue[]) {
 export const nanoid = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789");
 
 export function absoluteUrl(path: string) {
-  return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
+  return `${process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL}${path}`;
 }

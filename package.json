@@ -1,6 +1,6 @@
 {
   "name": "pastebon",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -52,6 +52,7 @@
     "react-dom": "19.0.0",
     "react-wrap-balancer": "^1.1.1",
     "sonner": "^1.7.1",
+    "swr": "^2.2.5",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1",

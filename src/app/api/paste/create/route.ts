@@ -21,12 +21,14 @@ const schema = zfd
     message: `File size should not exceed ${fileSizeLimit}MB`,
   });
 
-export async function PUT(req: NextApiRequest & Request) {
+export async function PUT(req: Request) {
   let formData: typeof schema._type;
 
   try {
     formData = schema.parse(await req.formData());
   } catch (err) {
+    console.log(err);
+
     if (err instanceof z.ZodError) {
       return Response.json(
         {
@@ -56,6 +58,9 @@ export async function PUT(req: NextApiRequest & Request) {
   formData.adminPassword = !formData.adminPassword
     ? nanoid(16)
     : formData.adminPassword;
+
+  const unhashedAdminPassword = formData.adminPassword;
+
   formData.adminPassword = await argon2.hash(formData.adminPassword);
 
   await supabase.storage
@@ -76,6 +81,7 @@ export async function PUT(req: NextApiRequest & Request) {
       success: true,
       data: {
         id,
+        password: unhashedAdminPassword,
       },
     },
     {

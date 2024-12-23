@@ -1,15 +1,13 @@
 "use client";
-import { Suspense, useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CodeEditor } from "@/components/code-editor";
+import { CreateCodeEditor } from "@/components/create-code-editor";
 
 export default function Landing() {
   const [code, setCode] = useState("");
@@ -21,7 +19,7 @@ export default function Landing() {
           <CardTitle>Paste</CardTitle>
         </CardHeader>
         <CardContent>
-          <CodeEditor code={code} setCode={setCode} />
+          <CreateCodeEditor code={code} setCode={setCode} />
         </CardContent>
       </Card>
     </main>

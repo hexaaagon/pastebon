@@ -48,6 +48,7 @@ export async function GET(
     success: true,
     data: {
       paste,
+      language: pasteDatabase.data.language,
     },
   });
 }
