@@ -1,22 +1,19 @@
 "use client";
+import { postCodeAction } from "@/lib/actions/code";
 import { languages, parser } from "@/config/code";
-import MonacoCodeEditor from "@monaco-editor/react";
 import { type editor as MonacoEditor } from "monaco-editor";
 import { format as prettierFormat } from "prettier/standalone";
-import prettierPluginTypescript from "prettier/plugins/typescript";
-import prettierPluginEstree from "prettier/plugins/estree";
+import { CodeEditor } from "./code-editor";
 
-import { useTheme } from "next-themes";
 import {
   type Dispatch,
   type SetStateAction,
   type HTMLProps,
   useEffect,
   useState,
-  useActionState,
 } from "react";
 import { toast } from "sonner";
-import useSWR from "swr";
+import { useRouter } from "next/navigation";
 
 import { SendHorizonal, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,8 +25,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { postCodeAction } from "@/lib/actions/code";
-import { CodeEditor } from "./code-editor";
+import {
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SplitButton } from "@/components/ui/split-button";
 
 export function CreateCodeEditor({
   code,
@@ -43,6 +46,8 @@ export function CreateCodeEditor({
   const [language, setLanguage] = useState<string>("plaintext");
   const [editor, setEditor] = useState<MonacoEditor.IStandaloneCodeEditor>();
 
+  const router = useRouter();
+
   function formatCode(force = false): any {
     if (code.length > 1000000 && !force)
       return toast.warning("Are you sure?", {
@@ -54,15 +59,19 @@ export function CreateCodeEditor({
         },
       });
     setFormatLoading(true);
+
+    const supportedLanguages = Object.keys(parser());
+
+    if (!supportedLanguages.includes(language)) {
+      setFormatLoading(false);
+
+      return toast.error("The language you pick is not supported.", {
+        description: "Tips: Try changing the language on the Bottom Left.",
+      });
+    }
+
     let startTime = Date.now();
-    prettierFormat(
-      code,
-      parser()[language]
-        ? parser()[language]
-        : {
-            parser: language,
-          },
-    )
+    prettierFormat(code, parser()[language].options)
       .then((str) => {
         setCode(str);
         let endTime = Date.now();
@@ -124,7 +133,29 @@ export function CreateCodeEditor({
       window.onbeforeunload = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code]);
+  }, [code, language]);
+
+  const submitCode = async (lang: "dynamic" | "plaintext") => {
+    const formData = new FormData();
+    formData.append("code", code);
+    formData.append("language", language);
+
+    toast.promise(postCodeAction(formData), {
+      loading: "Submitting your Paste Code...",
+      success: async (data) => {
+        if (!data.success)
+          return `Error while submitting your Paste Code. ${data.error}`;
+
+        router.push(`/${data.data.id}`);
+
+        return `Done!`;
+      },
+      action: {
+        label: "Info",
+        onClick: () => {},
+      },
+    });
+  };
 
   return (
     <CodeEditor
@@ -162,30 +193,57 @@ export function CreateCodeEditor({
             {typeof editor === "undefined" ? (
               <>
                 <Skeleton className="h-9 w-24" />
-                <Skeleton className="h-9 w-24" />
+                <Skeleton className="h-9 w-32" />
               </>
             ) : (
               <>
                 <Button
                   onClick={() => formatCode()}
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-2"
                   disabled={formatLoading}
                 >
                   <Sparkles size={16} className="size-2 sm:size-4" />
                   Format
                 </Button>
-                <Button
-                  onClick={async () => {
-                    const formData = new FormData();
-                    formData.append("code", code);
-                    const action = await postCodeAction(formData);
+                <SplitButton
+                  buttonChildren={
+                    <>
+                      <SendHorizonal size={16} className="size-2 sm:size-4" />
+                      Paste
+                    </>
+                  }
+                  dropdownChildren={
+                    <>
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                          Submit as ...
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent className="w-48">
+                          <DropdownMenuItem
+                            onClick={() => submitCode("dynamic")}
+                          >
+                            Plain Text
+                          </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuSub>
+                      <DropdownMenuItem disabled>
+                        Save as Draft
+                      </DropdownMenuItem>
+                    </>
+                  }
+                  className={{
+                    button: "flex items-center gap-2",
                   }}
-                  className="flex items-center gap-1"
                   disabled={formatLoading || code === ""}
-                >
-                  <SendHorizonal size={16} className="size-2 sm:size-4" />
-                  Post
-                </Button>
+                  options={{
+                    DropdownMenuContent: {
+                      side: "top",
+                    },
+                    Button: {
+                      onClick: () => submitCode("dynamic"),
+                    },
+                  }}
+                />
               </>
             )}
           </div>

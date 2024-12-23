@@ -123,10 +123,11 @@ export function parser(options?: PrettierOptions): {
     typescript: {
       provider: "prettier",
       options: {
-        parser: "babel",
+        parser: "typescript",
         plugins: [prettierParserTypescript, prettierPluginEstree],
         ...options,
       },
     },
+    // TODO: Add more language support
   };
 }

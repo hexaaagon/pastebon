@@ -63,14 +63,3 @@ export function NavDocs() {
     </SidebarGroup>
   );
 }
-
-// <SidebarMenuItem key={nav.title}>
-//   {nav.items.map((item) => (
-//     <SidebarMenuButton asChild key={item.title} tooltip={item.title}>
-//       <Link href={item.href}>
-//         {item.icon && <item.icon />}
-//         <span>{item.title}</span>
-//       </Link>
-//     </SidebarMenuButton>
-//   ))}
-// </SidebarMenuItem>

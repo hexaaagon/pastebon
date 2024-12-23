@@ -6,13 +6,13 @@ import { zfd } from "zod-form-data";
 import { createSchema, pasteIdLength } from "@/lib/constants";
 
 import { createServiceServer } from "../supabase/service-server";
-import { nanoid } from "nanoid";
+import { nanoid } from "@/lib/utils";
 import argon2 from "@node-rs/argon2";
 
-type ActionResult =
+type ActionResult<T = unknown> =
   | {
       success: true;
-      data: unknown;
+      data: T;
     }
   | { success: false; error: any };
 
@@ -23,7 +23,9 @@ const schema = zfd.formData({
   language: languageSchema.default("plaintext"),
 });
 
-export async function postCodeAction(form: FormData): Promise<ActionResult> {
+export async function postCodeAction(
+  form: FormData,
+): Promise<ActionResult<{ id: string; password: string }>> {
   let data: typeof schema._type;
 
   try {
@@ -58,7 +60,7 @@ export async function postCodeAction(form: FormData): Promise<ActionResult> {
 
 export async function createCode(
   formData: typeof createSchema._type,
-): Promise<ActionResult> {
+): Promise<ActionResult<{ id: string; password: string }>> {
   const supabase = createServiceServer();
   const id = nanoid(pasteIdLength);
 

@@ -6,7 +6,7 @@ import { EditorProps } from "@monaco-editor/react";
 
 import { useEffect, useState } from "react";
 
-import { SendHorizonal } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -92,7 +92,7 @@ export function ViewCodeEditor({
                   onClick={async () => {}}
                   className="flex items-center gap-1"
                 >
-                  <SendHorizonal size={16} className="size-2 sm:size-4" />
+                  <Pencil size={16} className="size-2 sm:size-4" />
                   Edit
                 </Button>
               </>

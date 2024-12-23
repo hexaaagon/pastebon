@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { pgTable, pgPolicy, text } from "drizzle-orm/pg-core";
 import { anonRole } from "drizzle-orm/supabase";
-import { nanoid } from "nanoid";
+import { nanoid } from "@/lib/utils";
 
 export const pasteTable = pgTable(
   "paste",
