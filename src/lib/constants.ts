@@ -12,6 +12,6 @@ export const createSchema = zfd
     adminPassword: z.string().nullish(),
     language: languageSchema.default("plaintext"),
   })
-  .refine(async (args) => args.file.size <= fileSizeLimit * 1024 * 1024, {
+  .refine((args) => args.file.size <= fileSizeLimit * 1024 * 1024, {
     message: `File size should not exceed ${fileSizeLimit}MB`,
   });
