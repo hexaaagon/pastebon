@@ -47,7 +47,7 @@ export async function postCodeAction(form: FormData): Promise<ActionResult> {
   data.adminPassword && formData.append("adminPassword", data.adminPassword);
 
   const paste = (await (
-    await fetch(absoluteUrl("/api/paste/create"), {
+    await fetch(`//${absoluteUrl("/api/paste/create")}`, {
       method: "PUT",
       body: formData,
     })
