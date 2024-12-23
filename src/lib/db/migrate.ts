@@ -22,7 +22,7 @@ const runMigrate = async () => {
   // Storage Bucket Create
   console.log("⏳ Creating Supabase Bucket...");
   const supabase = createServiceServer();
-  if ((await supabase.storage.getBucket("paste")).error)
+  if (!(await supabase.storage.getBucket("paste")).data)
     await supabase.storage.createBucket("paste");
 
   const end = Date.now();
