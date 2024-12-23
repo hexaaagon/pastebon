@@ -100,6 +100,11 @@ export const languages: [string, string, React.ReactNode][] = [
   ["YAML", "yml", <SiYaml key="yml" />],
 ];
 
+export const languageValues = languages.map((lang) => lang[1]) as [
+  string,
+  ...string[],
+];
+
 export function parser(options: PrettierOptions): {
   [key: string]: {
     provider: "prettier";

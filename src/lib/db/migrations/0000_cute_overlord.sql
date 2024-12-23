@@ -2,6 +2,7 @@ CREATE TABLE "paste" (
 	"id" text PRIMARY KEY NOT NULL,
 	"admin_password" text NOT NULL,
 	"path" text NOT NULL,
+	"language" text DEFAULT 'plaintext',
 	CONSTRAINT "paste_id_unique" UNIQUE("id"),
 	CONSTRAINT "paste_admin_password_unique" UNIQUE("admin_password")
 );

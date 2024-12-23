@@ -19,7 +19,8 @@ declare global {
       POSTGRES_HOST: string;
 
       // Options
-      HIDE_DOCS_NAVIGATION?: "true" | "false";
+      MAX_SIZE_LIMIT?: string;
+      PASTE_ID_LENGTH?: string;
     }
   }
 }

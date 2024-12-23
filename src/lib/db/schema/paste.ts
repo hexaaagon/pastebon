@@ -12,6 +12,8 @@ export const pasteTable = pgTable(
       .$defaultFn(() => nanoid()),
     adminPassword: text("admin_password").unique().notNull(),
     storagePath: text("path").notNull(),
+
+    language: text("language").default("plaintext"),
   },
   (t) => [
     pgPolicy(`anon-readonly`, {
