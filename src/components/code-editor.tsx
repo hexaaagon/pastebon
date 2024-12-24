@@ -1,10 +1,10 @@
 "use client";
-import { languages, parser } from "@/config/code";
-import MonacoCodeEditor, { type EditorProps } from "@monaco-editor/react";
+import MonacoCodeEditor, {
+  Monaco,
+  type EditorProps,
+} from "@monaco-editor/react";
 import { type editor as MonacoEditor } from "monaco-editor";
-import { format as prettierFormat } from "prettier/standalone";
-import prettierPluginTypescript from "prettier/plugins/typescript";
-import prettierPluginEstree from "prettier/plugins/estree";
+import OneDarkPro from "@/lib/theme/onedarkpro.json";
 
 import { useTheme } from "next-themes";
 import React, {
@@ -14,17 +14,7 @@ import React, {
   useState,
 } from "react";
 
-import { SendHorizonal, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { postCodeAction } from "@/lib/actions/code";
 
 export function CodeEditor({
   code,
@@ -40,6 +30,8 @@ export function CodeEditor({
   navChildren?: React.ReactNode;
 } & EditorProps) {
   const [editor, setEditor] = useState<MonacoEditor.IStandaloneCodeEditor>();
+  const [monaco, setMonaco] = useState<Monaco>();
+
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
@@ -57,6 +49,10 @@ export function CodeEditor({
   }, [editor]);
 
   useEffect(() => {
+    if (!monaco) return;
+  }, [monaco, resolvedTheme]);
+
+  useEffect(() => {
     window.onbeforeunload = () => (code === "" ? null : true);
 
     return () => {
@@ -71,12 +67,21 @@ export function CodeEditor({
         <MonacoCodeEditor
           className="h-[calc(70vh)] max-w-full font-mono"
           language={language}
-          theme={resolvedTheme === "dark" ? "vs-dark" : "vs"}
+          theme={resolvedTheme === "dark" ? "OneDarkPro" : "light"}
           loading={<Skeleton className="h-[calc(70vh)] w-full" />}
           value={code}
+          beforeMount={(monaco) => {
+            monaco.editor.defineTheme("OneDarkPro", {
+              base: "vs-dark",
+              inherit: true,
+              rules: [],
+              ...OneDarkPro,
+            });
+          }}
           onChange={(str) => setCode && setCode(str || "")}
           onMount={(editor, monaco) => {
             setEditor(editor);
+            setMonaco(monaco);
 
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             onMount && onMount(editor, monaco);

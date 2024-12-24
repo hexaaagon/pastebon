@@ -1,11 +1,13 @@
 "use client";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ViewCodeEditor } from "@/components/view-code-editor";
 
 import useSWR from "swr";
 import fetcher from "@/lib/fetch";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ViewCode() {
   const params = useParams<{ id: string }>();
@@ -23,15 +25,42 @@ export default function ViewCode() {
 
   return (
     <main className="p-6 px-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>Paste</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ViewCodeEditor
-            language={isLoading ? "plaintext" : data!.data.language}
-            code={isLoading ? "Loading..." : data!.data.paste}
+      <header className="pb-4 leading-tight">
+        <span className="flex items-center gap-2">
+          <Image
+            src="/static/images/logo-light.png"
+            alt="Pastebon Logo"
+            width={48}
+            height={48}
+            priority
+            className="hidden size-6 items-center dark:block"
           />
+          <Image
+            src="/static/images/logo-dark.png"
+            alt="Pastebon Logo"
+            width={48}
+            height={48}
+            priority
+            className="block size-6 items-center dark:hidden"
+          />
+          <p className="font-grotesque text-xl font-medium">Pastebon</p>
+        </span>
+        <p className="text-sm">
+          Paste your codes, logs, and errors{" "}
+          <strong className="font-semibold underline">anonymously</strong>.
+        </p>
+      </header>
+      <Card>
+        <CardHeader></CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <Skeleton className="h-[calc(70vh)] w-full" />
+          ) : (
+            <ViewCodeEditor
+              language={isLoading ? "plaintext" : data!.data?.language}
+              code={isLoading ? "Loading..." : data!.data?.paste}
+            />
+          )}
         </CardContent>
       </Card>
     </main>

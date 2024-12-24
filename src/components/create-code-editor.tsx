@@ -15,9 +15,23 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { SendHorizonal, Sparkles } from "lucide-react";
+import { Check, SendHorizonal, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -25,13 +39,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-} from "@/components/ui/dropdown-menu";
 import { SplitButton } from "@/components/ui/split-button";
 
 export function CreateCodeEditor({
@@ -138,7 +145,7 @@ export function CreateCodeEditor({
   const submitCode = async (lang: "dynamic" | "plaintext") => {
     const formData = new FormData();
     formData.append("code", code);
-    formData.append("language", language);
+    formData.append("language", lang === "dynamic" ? language : lang);
 
     toast.promise(postCodeAction(formData), {
       loading: "Submitting your Paste Code...",
@@ -148,12 +155,31 @@ export function CreateCodeEditor({
 
         router.push(`/${data.data.id}`);
 
-        return `Done!`;
+        return (
+          <div className="space-y-2">
+            <span className="flex items-center gap-2 text-sm font-medium">
+              <Check size={18} /> Done!
+            </span>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="text-xs" size="sm">
+                  View Paste info
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Paste Info</DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+          </div>
+        );
       },
-      action: {
-        label: "Info",
-        onClick: () => {},
-      },
+      duration: 15000,
     });
   };
 

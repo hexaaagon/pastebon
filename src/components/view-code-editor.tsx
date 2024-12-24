@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 export function ViewCodeEditor({
   code,
@@ -89,7 +90,9 @@ export function ViewCodeEditor({
             ) : (
               <>
                 <Button
-                  onClick={async () => {}}
+                  onClick={async () => {
+                    toast.info("Coming soon :')");
+                  }}
                   className="flex items-center gap-1"
                 >
                   <Pencil size={16} className="size-2 sm:size-4" />
