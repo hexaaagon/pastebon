@@ -15,3 +15,8 @@ export const createSchema = zfd
   .refine((args) => args.file.size <= fileSizeLimit * 1024 * 1024, {
     message: `File size should not exceed ${fileSizeLimit}MB`,
   });
+
+export enum ErrorPages {
+  NoPasteFound = "/error-pages/no-paste-found",
+  NotFound = "/error-pages/not-found",
+}

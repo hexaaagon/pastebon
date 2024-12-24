@@ -93,3 +93,40 @@ export async function createCode(
     },
   };
 }
+
+export async function viewCode(
+  id: string,
+): Promise<ActionResult<{ paste: string; language: string }>> {
+  const supabase = createServiceServer();
+  const pasteDatabase = await supabase
+    .from("paste")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (pasteDatabase.error)
+    return {
+      success: false,
+      error: pasteDatabase.error.message,
+    };
+
+  const pasteData = await supabase.storage
+    .from("paste")
+    .download(pasteDatabase.data.path);
+
+  if (pasteData.error)
+    return {
+      success: false,
+      error: "No file found",
+    };
+
+  const paste = await pasteData.data.text();
+
+  return {
+    success: true,
+    data: {
+      paste,
+      language: pasteDatabase.data.language || "plaintext",
+    },
+  };
+}

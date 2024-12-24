@@ -153,7 +153,7 @@ export function CreateCodeEditor({
         if (!data.success)
           return `Error while submitting your Paste Code. ${data.error}`;
 
-        router.push(`/${data.data.id}`);
+        router.push(`/paste/${data.data.id}`);
 
         return (
           <div className="space-y-2">

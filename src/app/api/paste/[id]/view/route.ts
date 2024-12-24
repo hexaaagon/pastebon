@@ -1,4 +1,4 @@
-import { createServiceServer } from "@/lib/supabase/service-server";
+import { viewCode } from "@/lib/actions/code";
 
 export async function GET(
   request: Request,
@@ -8,47 +8,9 @@ export async function GET(
     params: Promise<{ id: string }>;
   },
 ) {
-  const supabase = createServiceServer();
-  const pasteDatabase = await supabase
-    .from("paste")
-    .select("*")
-    .eq("id", (await params).id)
-    .single();
+  const code = await viewCode((await params).id);
 
-  if (pasteDatabase.error)
-    return Response.json(
-      {
-        success: false,
-        error: pasteDatabase.error.message,
-      },
-      {
-        status: 400,
-      },
-    );
-
-  const pasteData = await supabase.storage
-    .from("paste")
-    .download(pasteDatabase.data.path);
-
-  if (pasteData.error) {
-    return Response.json(
-      {
-        success: false,
-        error: "No file found",
-      },
-      {
-        status: 404,
-      },
-    );
-  }
-
-  const paste = await pasteData.data.text();
-
-  return Response.json({
-    success: true,
-    data: {
-      paste,
-      language: pasteDatabase.data.language,
-    },
+  return Response.json(code, {
+    status: code.success ? 200 : 400,
   });
 }
