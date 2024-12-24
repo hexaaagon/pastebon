@@ -3,13 +3,20 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { createServiceServer } from "../supabase/service-server";
 import { ErrorPages } from "../constants";
 
+const whitelistSuffix = ["/raw"];
+
 export default async function pasteHandler(
   req: NextRequest,
   res: NextResponse,
   supaClient: SupabaseClient,
 ) {
   if (!req.nextUrl.pathname.startsWith("/paste/")) return;
-  const pasteId = req.nextUrl.pathname.replace("/paste/", "");
+  let pasteId = req.nextUrl.pathname.replace("/paste/", "");
+
+  for (const suffix of whitelistSuffix) {
+    pasteId = pasteId.endsWith(suffix) ? pasteId.replace(suffix, "") : pasteId;
+  }
+
   const pasteExist = await isPasteExists(pasteId);
 
   if (pasteExist) return;

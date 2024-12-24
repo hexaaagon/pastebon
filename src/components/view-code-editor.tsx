@@ -4,9 +4,10 @@ import { type editor as MonacoEditor } from "monaco-editor";
 import { CodeEditor } from "./code-editor";
 import { EditorProps } from "@monaco-editor/react";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { Pencil } from "lucide-react";
+import { Pencil, ScrollText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -20,9 +21,11 @@ import { toast } from "sonner";
 
 export function ViewCodeEditor({
   code,
+  id,
   ...props
 }: {
   code: string;
+  id: string;
 } & EditorProps) {
   const [language, setLanguage] = useState<string>();
   const [editor, setEditor] = useState<MonacoEditor.IStandaloneCodeEditor>();
@@ -86,9 +89,16 @@ export function ViewCodeEditor({
             {typeof editor === "undefined" ? (
               <>
                 <Skeleton className="h-9 w-24" />
+                <Skeleton className="h-9 w-24" />
               </>
             ) : (
               <>
+                <Button asChild>
+                  <Link href={`/paste/${id}/raw`}>
+                    <ScrollText size={16} className="size-2 sm:size-4" />
+                    View Raw
+                  </Link>
+                </Button>
                 <Button
                   onClick={async () => {
                     toast.info("Coming soon :')");

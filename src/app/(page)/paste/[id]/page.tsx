@@ -52,13 +52,14 @@ export default function ViewCode() {
       </header>
       <Card>
         <CardHeader></CardHeader>
-        <CardContent>
+        <CardContent className="-mt-4">
           {isLoading ? (
             <Skeleton className="h-[calc(70vh)] w-full" />
           ) : (
             <ViewCodeEditor
               language={isLoading ? "plaintext" : data!.data?.language}
               code={isLoading ? "Loading..." : data!.data?.paste}
+              id={params.id}
             />
           )}
         </CardContent>

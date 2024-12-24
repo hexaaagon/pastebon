@@ -105,6 +105,7 @@ export function CodeEditor({
             minimap: {
               enabled: false,
             },
+            tabSize: 2,
             ...options,
           }}
           {...props}

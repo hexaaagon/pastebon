@@ -5,6 +5,17 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreateCodeEditor } from "@/components/create-code-editor";
 
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DoneDialog } from "@/components/done-dialog";
+
 export default function Landing() {
   const [code, setCode] = useState("");
 
@@ -37,10 +48,20 @@ export default function Landing() {
       </header>
       <Card>
         <CardHeader></CardHeader>
-        <CardContent>
+        <CardContent className="-mt-4">
           <CreateCodeEditor code={code} setCode={setCode} />
         </CardContent>
       </Card>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="text-xs" size="sm">
+            View Paste info
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DoneDialog id="CxKig2fPLM" password="somepasswordig" />
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }

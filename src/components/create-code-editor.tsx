@@ -40,6 +40,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SplitButton } from "@/components/ui/split-button";
+import { DoneDialog } from "./done-dialog";
 
 export function CreateCodeEditor({
   code,
@@ -167,13 +168,7 @@ export function CreateCodeEditor({
                 </Button>
               </DialogTrigger>
               <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Paste Info</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
-                  </DialogDescription>
-                </DialogHeader>
+                <DoneDialog id={data.data.id} password={data.data.password} />
               </DialogContent>
             </Dialog>
           </div>
