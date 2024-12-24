@@ -20,7 +20,7 @@ export default function Landing() {
   const [code, setCode] = useState("");
 
   return (
-    <main className="p-6 px-8">
+    <main className="p-8 px-10">
       <header className="pb-4 leading-tight">
         <span className="flex items-center gap-2">
           <Image

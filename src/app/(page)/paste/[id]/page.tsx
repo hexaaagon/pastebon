@@ -24,7 +24,7 @@ export default function ViewCode() {
   >(`/api/paste/${params.id}/view`, fetcher);
 
   return (
-    <main className="p-6 px-8">
+    <main className="p-8 px-10">
       <header className="pb-4 leading-tight">
         <span className="flex items-center gap-2">
           <Image
@@ -54,7 +54,7 @@ export default function ViewCode() {
         <CardHeader></CardHeader>
         <CardContent className="-mt-4">
           {isLoading ? (
-            <Skeleton className="h-[calc(70vh)] w-full" />
+            <Skeleton className="h-[calc(60vh)] w-full" />
           ) : (
             <ViewCodeEditor
               language={isLoading ? "plaintext" : data!.data?.language}

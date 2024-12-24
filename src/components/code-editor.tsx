@@ -65,10 +65,10 @@ export function CodeEditor({
     <div className="space-y-4">
       <div className="max-h-screen overflow-hidden rounded-xl">
         <MonacoCodeEditor
-          className="h-[calc(70vh)] max-w-full font-mono"
+          className="h-[calc(60vh)] max-w-full py-4 font-mono"
           language={language}
           theme={resolvedTheme === "dark" ? "OneDarkPro" : "light"}
-          loading={<Skeleton className="h-[calc(70vh)] w-full" />}
+          loading={<Skeleton className="h-[calc(60vh)] w-full" />}
           value={code}
           beforeMount={(monaco) => {
             monaco.editor.defineTheme("OneDarkPro", {

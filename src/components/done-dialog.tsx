@@ -15,6 +15,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { absoluteUrl } from "@/lib/utils";
+
+const PASTEURL = `${absoluteUrl}/paste`;
 
 export function DoneDialog({ id, password }: { id: string; password: string }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,6 +30,30 @@ export function DoneDialog({ id, password }: { id: string; password: string }) {
         </DialogTitle>
       </DialogHeader>
       <div className="flex flex-col space-y-2 *:space-y-1">
+        <div>
+          <Label htmlFor="paste_url" className="text-right">
+            Paste URL
+          </Label>
+          <div className="flex items-center gap-2">
+            <Input
+              id="paste_url"
+              value={`${PASTEURL}/${id}`}
+              className="col-span-3 font-mono"
+              readOnly
+            />
+            <Button
+              size="icon"
+              className="w-12"
+              onClick={() => {
+                navigator.clipboard.writeText(`${PASTEURL}/${id}`);
+
+                toast.success("Copied to Clipboard.");
+              }}
+            >
+              <Clipboard />
+            </Button>
+          </div>
+        </div>
         <div>
           <Label htmlFor="password" className="text-right">
             Admin Password
