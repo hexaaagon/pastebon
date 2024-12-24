@@ -52,16 +52,6 @@ export default function Landing() {
           <CreateCodeEditor code={code} setCode={setCode} />
         </CardContent>
       </Card>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="text-xs" size="sm">
-            View Paste info
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DoneDialog id="CxKig2fPLM" password="somepasswordig" />
-        </DialogContent>
-      </Dialog>
     </main>
   );
 }
