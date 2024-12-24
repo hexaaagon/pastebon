@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { absoluteUrl } from "@/lib/utils";
 
-const PASTEURL = `${absoluteUrl}/paste`;
+const PASTEURL = absoluteUrl("/paste");
 
 export function DoneDialog({ id, password }: { id: string; password: string }) {
   const [showPassword, setShowPassword] = useState(false);
