@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm run build:docs && pnpm run build:next",
+    "build:next": "next build",
+    "build:docs": "node scripts/generate-docs.mjs",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
@@ -15,8 +17,7 @@
     "db:pull": "drizzle-kit introspect",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:check": "drizzle-kit check",
-    "build:docs": "node ./scripts/generate-docs.mjs"
+    "db:check": "drizzle-kit check"
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "^10.2.0",
