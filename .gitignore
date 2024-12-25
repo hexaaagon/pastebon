@@ -17,8 +17,8 @@
 /.next/
 /out/
 
-# contentlayer
-.contentlayer
+# docs
+.source
 
 # production
 /build

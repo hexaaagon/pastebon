@@ -7,7 +7,6 @@ import Link from "next/link";
 import { BookOpen, ScrollText, Settings } from "lucide-react";
 
 import { NavMain } from "@/components/sidebar/nav-main";
-import { NavDocs } from "@/components/sidebar/nav-docs";
 import {
   Sidebar,
   SidebarContent,
@@ -80,7 +79,6 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain />
-        {type === "docs" && <NavDocs />}
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenuButton asChild size="sm" tooltip="Settings">

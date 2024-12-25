@@ -1,10 +1,13 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
+import { createPreset } from "fumadocs-ui/tailwind-plugin";
 
 export const darkMode = ["class"];
 export const content = [
+  "node_modules/fumadocs-ui/dist/**/*.js",
+
   "src/app/**/*.{ts,tsx}",
   "src/components/**/*.{ts,tsx}",
-  "src/content/**/*.{ts,tsx,mdx}",
+  "src/content/**/*.mdx",
 ];
 export const theme = {
   container: {
@@ -90,3 +93,4 @@ export const theme = {
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 export const plugins = [require("tailwindcss-animate")];
+export const presets = [createPreset()];

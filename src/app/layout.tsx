@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 
+import { RootProvider } from "fumadocs-ui/provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 
@@ -44,7 +45,9 @@ export default function RootLayout({
         )}
         suppressHydrationWarning
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <RootProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </RootProvider>
       </body>
     </html>
   );

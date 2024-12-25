@@ -18,5 +18,3 @@ export interface MainNavItem {
   href: string;
   items: NavItem[];
 }
-
-export interface DocsNavItem extends MainNavItem {}
