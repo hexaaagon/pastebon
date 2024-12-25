@@ -1,7 +1,7 @@
 <div align="center">
   <div>
     <a href="https://pastebon.hexaa.lol" target="_blank" rel="noopener">
-      <img style="object-fit: cover;" align="center" width="100%" src="https://github.com/hexaaagon/pastebon/blob/main/.github/images/readme.png?raw=true" alt="Pastebon - Paste your codes, logs, and errors anonymously." />
+      <img style="object-fit: cover;" align="center" width="100%" src="https://github.com/hexaaagon/pastebon/blob/main/public/static/images/banner/Pastebon.png?raw=true" alt="Pastebon - Paste your codes, logs, and errors anonymously." />
     </a>
   </div>
   <br />

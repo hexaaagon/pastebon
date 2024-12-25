@@ -1,0 +1,283 @@
+openapi: 3.0.3
+info:
+  title: Pastebon
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: https://pastebon.hexaa.lol
+paths:
+  /api/paste/{pasteId}/view:
+    get:
+      summary: View Paste
+      description: View Paste
+      operationId: viewPaste
+      responses:
+        "200":
+          description: 200 - Paste found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      language:
+                        type: string
+                        example: plaintext
+                      paste:
+                        type: string
+                        example: console.log("Hello World!")
+                  success:
+                    type: boolean
+                    example: true
+              examples:
+                200 - Paste found:
+                  value:
+                    data:
+                      language: plaintext
+                      paste: console.log("Hello World!")
+                    success: true
+        "400":
+          description: pasteId is invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: JSON object requested, multiple (or no) rows returned
+                  success:
+                    type: boolean
+                    example: false
+              examples:
+                pasteId is invalid:
+                  value:
+                    error: JSON object requested, multiple (or no) rows returned
+                    success: false
+    parameters:
+      - name: pasteId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ""
+        description: The Paste you want to see it's information.
+  /api/paste/create:
+    put:
+      summary: Create Paste
+      description: Create Paste
+      operationId: createPaste
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                adminPassword:
+                  description: >-
+                    The admin password for the paste. Used for editing/deleting
+                    the paste.
+                  type: string
+                file:
+                  description: The file code you want to upload.
+                  type: string
+                  format: binary
+                  example: File
+                language:
+                  description: The languange of the code.
+                  type: string
+                  example: "plaintext"
+                  enum:
+                    [
+                      apex,
+                      azcli,
+                      bat,
+                      c,
+                      clojure,
+                      coffeescript,
+                      cpp,
+                      csharp,
+                      css,
+                      dockerfile,
+                      fsharp,
+                      go,
+                      graphql,
+                      handlebars,
+                      html,
+                      ini,
+                      java,
+                      javascript,
+                      json,
+                      kotlin,
+                      less,
+                      lua,
+                      markdown,
+                      msdax,
+                      mysql,
+                      objectivec,
+                      pascal,
+                      perl,
+                      pgsql,
+                      php,
+                      plaintext,
+                      postiats,
+                      powerquery,
+                      powershell,
+                      pug,
+                      python,
+                      r,
+                      Razor,
+                      Redis,
+                      Redshift,
+                      Ruby,
+                      Rust,
+                      sb,
+                      scheme,
+                      scss,
+                      shell,
+                      sol,
+                      sql,
+                      st,
+                      swift,
+                      tcl,
+                      typescript,
+                      vb,
+                      xml,
+                      yml,
+                    ]
+      responses:
+        "201":
+          description: Paste Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: fA4FbhcrOP
+                      password:
+                        type: string
+                        example: <REDACTED>
+                  success:
+                    type: boolean
+                    example: true
+              examples:
+                Paste Created:
+                  value:
+                    data:
+                      id: fA4FbhcrOP
+                      password: <REDACTED>
+                    success: true
+        "400 No File":
+          description: No file uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      file:
+                        type: array
+                        items:
+                          type: string
+                          example: Input not instance of File
+                        example: Input not instance of File
+                  success:
+                    type: boolean
+                    example: false
+              examples:
+                Language not the one of the enum:
+                  value:
+                    error:
+                      language:
+                        - >-
+                          Invalid enum value. Expected 'apex' | 'azcli' | 'bat'
+                          | 'c' | 'clojure' | 'coffeescript' | 'cpp' | 'csharp'
+                          | 'css' | 'dockerfile' | 'fsharp' | 'go' | 'graphql' |
+                          'handlebars' | 'html' | 'ini' | 'java' | 'javascript'
+                          | 'json' | 'kotlin' | 'less' | 'lua' | 'markdown' |
+                          'msdax' | 'mysql' | 'objective-c' | 'pascal' | 'perl'
+                          | 'pgsql' | 'php' | 'plaintext' | 'postiats' |
+                          'powerquery' | 'powershell' | 'pug' | 'python' | 'r' |
+                          'Razor' | 'Redis' | 'Redshift' | 'Ruby' | 'Rust' |
+                          'sb' | 'scheme' | 'scss' | 'shell' | 'sol' | 'sql' |
+                          'st' | 'swift' | 'tcl' | 'typescript' | 'vb' | 'xml' |
+                          'yml', received 'definitely_not_plaintext'
+                    success: false
+        "400 Invalid Language":
+          description: Language not the one of the enum
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      language:
+                        type: array
+                        items:
+                          type: string
+                          example: >-
+                            Invalid enum value. Expected 'apex' | 'azcli' |
+                            'bat' | 'c' | 'clojure' | 'coffeescript' | 'cpp' |
+                            'csharp' | 'css' | 'dockerfile' | 'fsharp' | 'go' |
+                            'graphql' | 'handlebars' | 'html' | 'ini' | 'java' |
+                            'javascript' | 'json' | 'kotlin' | 'less' | 'lua' |
+                            'markdown' | 'msdax' | 'mysql' | 'objective-c' |
+                            'pascal' | 'perl' | 'pgsql' | 'php' | 'plaintext' |
+                            'postiats' | 'powerquery' | 'powershell' | 'pug' |
+                            'python' | 'r' | 'Razor' | 'Redis' | 'Redshift' |
+                            'Ruby' | 'Rust' | 'sb' | 'scheme' | 'scss' | 'shell'
+                            | 'sol' | 'sql' | 'st' | 'swift' | 'tcl' |
+                            'typescript' | 'vb' | 'xml' | 'yml', received
+                            'definitely_not_plaintext'
+                        example:
+                          - >-
+                            Invalid enum value. Expected 'apex' | 'azcli' |
+                            'bat' | 'c' | 'clojure' | 'coffeescript' | 'cpp' |
+                            'csharp' | 'css' | 'dockerfile' | 'fsharp' | 'go' |
+                            'graphql' | 'handlebars' | 'html' | 'ini' | 'java' |
+                            'javascript' | 'json' | 'kotlin' | 'less' | 'lua' |
+                            'markdown' | 'msdax' | 'mysql' | 'objective-c' |
+                            'pascal' | 'perl' | 'pgsql' | 'php' | 'plaintext' |
+                            'postiats' | 'powerquery' | 'powershell' | 'pug' |
+                            'python' | 'r' | 'Razor' | 'Redis' | 'Redshift' |
+                            'Ruby' | 'Rust' | 'sb' | 'scheme' | 'scss' | 'shell'
+                            | 'sol' | 'sql' | 'st' | 'swift' | 'tcl' |
+                            'typescript' | 'vb' | 'xml' | 'yml', received
+                            'definitely_not_plaintext'
+                  success:
+                    type: boolean
+                    example: false
+              examples:
+                Language not the one of the enum:
+                  value:
+                    error:
+                      language:
+                        - >-
+                          Invalid enum value. Expected 'apex' | 'azcli' | 'bat'
+                          | 'c' | 'clojure' | 'coffeescript' | 'cpp' | 'csharp'
+                          | 'css' | 'dockerfile' | 'fsharp' | 'go' | 'graphql' |
+                          'handlebars' | 'html' | 'ini' | 'java' | 'javascript'
+                          | 'json' | 'kotlin' | 'less' | 'lua' | 'markdown' |
+                          'msdax' | 'mysql' | 'objective-c' | 'pascal' | 'perl'
+                          | 'pgsql' | 'php' | 'plaintext' | 'postiats' |
+                          'powerquery' | 'powershell' | 'pug' | 'python' | 'r' |
+                          'Razor' | 'Redis' | 'Redshift' | 'Ruby' | 'Rust' |
+                          'sb' | 'scheme' | 'scss' | 'shell' | 'sol' | 'sql' |
+                          'st' | 'swift' | 'tcl' | 'typescript' | 'vb' | 'xml' |
+                          'yml', received 'definitely_not_plaintext'
+                    success: false
+tags: []

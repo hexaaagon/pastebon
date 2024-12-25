@@ -3,7 +3,8 @@ import { createPreset } from "fumadocs-ui/tailwind-plugin";
 
 export const darkMode = ["class"];
 export const content = [
-  "node_modules/fumadocs-ui/dist/**/*.js",
+  "./node_modules/fumadocs-ui/dist/**/*.js",
+  "./node_modules/fumadocs-openapi/dist/**/*.js",
 
   "src/app/**/*.{ts,tsx}",
   "src/components/**/*.{ts,tsx}",

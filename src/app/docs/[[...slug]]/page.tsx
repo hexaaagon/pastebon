@@ -1,4 +1,4 @@
-import { source } from "@/lib/source";
+import { source, openapi } from "@/lib/source";
 import {
   DocsPage,
   DocsBody,
@@ -22,7 +22,9 @@ export default async function Page(props: {
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
-        <MDX components={{ ...defaultMdxComponents }} />
+        <MDX
+          components={{ ...defaultMdxComponents, APIPage: openapi.APIPage }}
+        />
       </DocsBody>
     </DocsPage>
   );
