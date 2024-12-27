@@ -10,6 +10,12 @@ export const nanoid = customAlphabet(
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
 );
 
-export function absoluteUrl(path: string) {
-  return `${process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL}${path}`;
+export const vercelUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_ENV}`
+  : undefined;
+
+export function absoluteUrl(path: string = "/") {
+  path = path.startsWith("/") ? path : `/${path}`;
+
+  return `${process.env.NEXT_PUBLIC_APP_URL || vercelUrl || "https://pastebon.hexaa.lol"}${path}`;
 }
