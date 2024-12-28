@@ -9,99 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      achievements: {
+      paste: {
         Row: {
-          catalog: Json
-          provider_id: string
-          user_id: string
-        }
-        Insert: {
-          catalog: Json
-          provider_id: string
-          user_id: string
-        }
-        Update: {
-          catalog?: Json
-          provider_id?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      games: {
-        Row: {
-          games: Json
-          isPlaying: boolean | null
-          lastPlayed: string | null
-          user_id: string
-        }
-        Insert: {
-          games?: Json
-          isPlaying?: boolean | null
-          lastPlayed?: string | null
-          user_id: string
-        }
-        Update: {
-          games?: Json
-          isPlaying?: boolean | null
-          lastPlayed?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      redeem_codes: {
-        Row: {
-          claimedBy: Json
-          code: string
-          createdAt: string
-          maxUses: string
-          reward: string
-          uuid: string
-        }
-        Insert: {
-          claimedBy?: Json
-          code: string
-          createdAt?: string
-          maxUses?: string
-          reward: string
-          uuid?: string
-        }
-        Update: {
-          claimedBy?: Json
-          code?: string
-          createdAt?: string
-          maxUses?: string
-          reward?: string
-          uuid?: string
-        }
-        Relationships: []
-      }
-      users: {
-        Row: {
-          backpack: Json | null
-          hasMigrated: boolean | null
+          admin_password: string
+          created_at: string | null
+          expires_at: string | null
           id: string
-          inventory: Json
-          provider_id: string
-          role: string
-          username: string
+          language: string | null
+          path: string
+          updated_at: string | null
+          viewed: number | null
         }
         Insert: {
-          backpack?: Json | null
-          hasMigrated?: boolean | null
+          admin_password: string
+          created_at?: string | null
+          expires_at?: string | null
           id: string
-          inventory: Json
-          provider_id: string
-          role?: string
-          username: string
+          language?: string | null
+          path: string
+          updated_at?: string | null
+          viewed?: number | null
         }
         Update: {
-          backpack?: Json | null
-          hasMigrated?: boolean | null
+          admin_password?: string
+          created_at?: string | null
+          expires_at?: string | null
           id?: string
-          inventory?: Json
-          provider_id?: string
-          role?: string
-          username?: string
+          language?: string | null
+          path?: string
+          updated_at?: string | null
+          viewed?: number | null
         }
         Relationships: []
       }
