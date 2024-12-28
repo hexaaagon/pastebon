@@ -9,24 +9,99 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      paste: {
+      achievements: {
         Row: {
-          admin_password: string
-          id: string
-          language: string | null
-          path: string
+          catalog: Json
+          provider_id: string
+          user_id: string
         }
         Insert: {
-          admin_password: string
-          id: string
-          language?: string | null
-          path: string
+          catalog: Json
+          provider_id: string
+          user_id: string
         }
         Update: {
-          admin_password?: string
+          catalog?: Json
+          provider_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      games: {
+        Row: {
+          games: Json
+          isPlaying: boolean | null
+          lastPlayed: string | null
+          user_id: string
+        }
+        Insert: {
+          games?: Json
+          isPlaying?: boolean | null
+          lastPlayed?: string | null
+          user_id: string
+        }
+        Update: {
+          games?: Json
+          isPlaying?: boolean | null
+          lastPlayed?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      redeem_codes: {
+        Row: {
+          claimedBy: Json
+          code: string
+          createdAt: string
+          maxUses: string
+          reward: string
+          uuid: string
+        }
+        Insert: {
+          claimedBy?: Json
+          code: string
+          createdAt?: string
+          maxUses?: string
+          reward: string
+          uuid?: string
+        }
+        Update: {
+          claimedBy?: Json
+          code?: string
+          createdAt?: string
+          maxUses?: string
+          reward?: string
+          uuid?: string
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          backpack: Json | null
+          hasMigrated: boolean | null
+          id: string
+          inventory: Json
+          provider_id: string
+          role: string
+          username: string
+        }
+        Insert: {
+          backpack?: Json | null
+          hasMigrated?: boolean | null
+          id: string
+          inventory: Json
+          provider_id: string
+          role?: string
+          username: string
+        }
+        Update: {
+          backpack?: Json | null
+          hasMigrated?: boolean | null
           id?: string
-          language?: string | null
-          path?: string
+          inventory?: Json
+          provider_id?: string
+          role?: string
+          username?: string
         }
         Relationships: []
       }

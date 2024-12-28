@@ -36,7 +36,12 @@ const runMigrate = async () => {
   // Supabase Extensions check
   console.log("⏳ Checking Supabase Extensions...");
   const isExtensionsEnabled = await checkExtensions(db, supabase);
-  if (!isExtensionsEnabled) process.exit(0);
+  if (!isExtensionsEnabled)
+    return () => {
+      const end = Date.now();
+      console.log("❌ Migrations completed in", end - start, "ms with errors.");
+      process.exit(0);
+    };
 
   // Supabase Cron setup
   console.log("⏳ Setup Supabase crons...");
@@ -61,7 +66,7 @@ async function checkExtensions(
   const cronResult = await db.execute(checkCronQuery);
 
   const isPgNetEnabled = pgNetResult.length > 0;
-  const isCronEnabled = cronResult.length > 0;
+  const isPgCronEnabled = cronResult.length > 0;
 
   console.log(
     isPgNetEnabled
@@ -69,12 +74,12 @@ async function checkExtensions(
       : "  ⚠️  WARNING : 'pg_net' extension not found. Please install the extension first.",
   );
   console.log(
-    isCronEnabled
-      ? "  ✅ 'Cron' extension installed."
-      : "  ⚠️  WARNING : 'Cron' extension not found. Please install the extension first.",
+    isPgCronEnabled
+      ? "  ✅ 'pg_cron' extension installed."
+      : "  ⚠️  WARNING : 'pg_cron' extension not found. Please install the extension first.",
   );
 
-  return isPgNetEnabled && isCronEnabled;
+  return isPgNetEnabled && isPgCronEnabled;
 }
 
 async function EnableSupabaseCron(
@@ -91,7 +96,12 @@ async function EnableSupabaseCron(
 
       if (!script) return false;
 
-      script = script.replaceAll("{{APP_URL}}", absoluteUrl().slice(0, -1));
+      script = script
+        .replaceAll("{{APP_URL}}", absoluteUrl().slice(0, -1))
+        .replaceAll(
+          "{{REST_API_PASSWORD}}",
+          `Bearer ${process.env.POSTGRES_PASSWORD}`,
+        );
 
       const args = (file.startsWith("/") ? file.replace("/", "") : file).split(
         "/",
