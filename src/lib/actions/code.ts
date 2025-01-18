@@ -94,9 +94,7 @@ export async function createCode(
   };
 }
 
-export async function viewCode(
-  id: string,
-): Promise<
+export async function viewCode(id: string): Promise<
   ActionResult<{
     paste: string;
     language: string;
@@ -130,8 +128,6 @@ export async function viewCode(
 
   const paste = await pasteData.data.text();
 
-  console.log(pasteDatabase.data.viewed);
-
   await supabase
     .from("paste")
     .update({ viewed: (pasteDatabase.data.viewed || 0) + 1 })
@@ -142,7 +138,7 @@ export async function viewCode(
     data: {
       paste,
       language: pasteDatabase.data.language || "plaintext",
-      views: pasteDatabase.data.viewed || 0,
+      views: (pasteDatabase.data.viewed || 0) + 1,
       createdAt: pasteDatabase.data.created_at!,
       expiresAt: pasteDatabase.data.expires_at!,
     },
