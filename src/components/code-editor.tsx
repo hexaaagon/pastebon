@@ -52,15 +52,6 @@ export function CodeEditor({
     if (!monaco) return;
   }, [monaco, resolvedTheme]);
 
-  useEffect(() => {
-    window.onbeforeunload = () => (code === "" ? null : true);
-
-    return () => {
-      window.onbeforeunload = null;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className="space-y-4">
       <div className="max-h-screen overflow-hidden rounded-xl">

@@ -96,7 +96,15 @@ export async function createCode(
 
 export async function viewCode(
   id: string,
-): Promise<ActionResult<{ paste: string; language: string }>> {
+): Promise<
+  ActionResult<{
+    paste: string;
+    language: string;
+    views: number;
+    createdAt: string;
+    expiresAt: string;
+  }>
+> {
   const supabase = createServiceServer();
   const pasteDatabase = await supabase
     .from("paste")
@@ -122,11 +130,21 @@ export async function viewCode(
 
   const paste = await pasteData.data.text();
 
+  console.log(pasteDatabase.data.viewed);
+
+  await supabase
+    .from("paste")
+    .update({ viewed: (pasteDatabase.data.viewed || 0) + 1 })
+    .eq("id", id);
+
   return {
     success: true,
     data: {
       paste,
       language: pasteDatabase.data.language || "plaintext",
+      views: pasteDatabase.data.viewed || 0,
+      createdAt: pasteDatabase.data.created_at!,
+      expiresAt: pasteDatabase.data.expires_at!,
     },
   };
 }

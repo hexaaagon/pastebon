@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   if (!check.success) return Response.json(check, { status: 401 });
 
   const supabase = createServiceServer();
-  const pasteDatabase = await supabase.from("paste").select("*");
+  const pasteDatabase = await supabase.from("paste").select("id");
 
   if (pasteDatabase.error) return Response.json({ success: false });
 

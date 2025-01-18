@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   const supabase = createServiceServer();
   const pasteDatabase = await supabase
     .from("paste")
-    .select("*")
+    .select("path, expires_at")
     .lte("expires_at", new Date().toISOString());
 
   if (pasteDatabase.error) return Response.json({ success: false });
