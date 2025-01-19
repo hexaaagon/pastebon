@@ -72,6 +72,12 @@ export async function createCode(
 
   formData.adminPassword = await argon2.hash(formData.adminPassword);
 
+  if (formData.options) {
+    formData.options.accessPassword =
+      formData.options.accessPassword &&
+      (await argon2.hash(formData.options.accessPassword));
+  }
+
   await supabase.storage
     .from("paste")
     .upload(`pastes/${id}.txt`, formData.file, {
@@ -83,6 +89,10 @@ export async function createCode(
     path: `pastes/${id}.txt`,
     admin_password: formData.adminPassword,
     language: formData.language,
+
+    max_views: formData.options?.maxViews,
+    expires_at: formData.options?.expiresAt,
+    access_password: formData.options?.accessPassword,
   });
 
   return {
@@ -94,7 +104,13 @@ export async function createCode(
   };
 }
 
-export async function viewCode(id: string): Promise<
+export async function viewCode({
+  id,
+  accessPassword,
+}: {
+  id: string;
+  accessPassword?: string;
+}): Promise<
   ActionResult<{
     paste: string;
     language: string;
@@ -116,6 +132,34 @@ export async function viewCode(id: string): Promise<
       error: pasteDatabase.error.message,
     };
 
+  if (
+    pasteDatabase.data.expires_at &&
+    new Date() > new Date(pasteDatabase.data.expires_at)
+  )
+    return {
+      success: false,
+      error: "Paste has expired",
+    };
+
+  if (pasteDatabase.data.access_password) {
+    if (!accessPassword)
+      return {
+        success: false,
+        error: "Access password required",
+      };
+
+    const validAccessPassword = await argon2.verify(
+      pasteDatabase.data.access_password,
+      accessPassword,
+    );
+
+    if (!validAccessPassword)
+      return {
+        success: false,
+        error: "Invalid access password",
+      };
+  }
+
   const pasteData = await supabase.storage
     .from("paste")
     .download(pasteDatabase.data.path);
@@ -130,7 +174,7 @@ export async function viewCode(id: string): Promise<
 
   await supabase
     .from("paste")
-    .update({ viewed: (pasteDatabase.data.viewed || 0) + 1 })
+    .update({ views: (pasteDatabase.data.views || 0) + 1 })
     .eq("id", id);
 
   return {
@@ -138,7 +182,7 @@ export async function viewCode(id: string): Promise<
     data: {
       paste,
       language: pasteDatabase.data.language || "plaintext",
-      views: (pasteDatabase.data.viewed || 0) + 1,
+      views: (pasteDatabase.data.views || 0) + 1,
       createdAt: pasteDatabase.data.created_at!,
       expiresAt: pasteDatabase.data.expires_at!,
     },

@@ -11,7 +11,7 @@ import fetcher from "@/lib/fetch";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function relativeTime(date: string): string {
-  const now = new Date();
+  const now = new Date(new Date().toLocaleString("en", { timeZone: "UTC" }));
   const past = new Date(date);
   const diff = Math.floor((now.getTime() - past.getTime()) / 1000);
 

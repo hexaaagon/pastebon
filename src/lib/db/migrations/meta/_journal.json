@@ -15,6 +15,13 @@
       "when": 1735274556305,
       "tag": "0001_stiff_brother_voodoo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737204480348,
+      "tag": "0002_furry_mac_gargan",
+      "breakpoints": true
     }
   ]
 }

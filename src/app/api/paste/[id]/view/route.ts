@@ -5,10 +5,13 @@ export async function GET(
   {
     params,
   }: {
-    params: Promise<{ id: string }>;
+    params: Promise<{ id: string; accessPassword?: string }>;
   },
 ) {
-  const code = await viewCode((await params).id);
+  const code = await viewCode({
+    id: (await params).id,
+    accessPassword: (await params).accessPassword,
+  });
 
   return Response.json(code, {
     status: code.success ? 200 : 400,

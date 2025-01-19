@@ -17,17 +17,25 @@ export default async function pasteHandler(
     pasteId = pasteId.endsWith(suffix) ? pasteId.replace(suffix, "") : pasteId;
   }
 
-  const pasteExist = await isPasteExists(pasteId);
-
-  if (pasteExist) return;
-
   const nextUrl = req.nextUrl.clone();
-  nextUrl.pathname = ErrorPages.NoPasteFound;
+  const paste = await getPaste(pasteId);
 
-  return NextResponse.rewrite(nextUrl);
+  if (paste) {
+    if (paste.expires_at && new Date() > new Date(paste.expires_at)) {
+      nextUrl.pathname = ErrorPages.PasteExpired;
+
+      return NextResponse.rewrite(nextUrl);
+    }
+
+    return;
+  } else {
+    nextUrl.pathname = ErrorPages.PasteNotFound;
+
+    return NextResponse.rewrite(nextUrl);
+  }
 }
 
-export async function isPasteExists(id: string) {
+export async function getPaste(id: string) {
   const supabase = createServiceServer();
   const pasteDatabase = await supabase
     .from("paste")
@@ -43,5 +51,5 @@ export async function isPasteExists(id: string) {
 
   if (pasteData.error) return false;
 
-  return true;
+  return pasteDatabase.data;
 }

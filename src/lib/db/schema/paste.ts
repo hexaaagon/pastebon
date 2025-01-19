@@ -19,10 +19,13 @@ export const pasteTable = pgTable(
     adminPassword: text("admin_password").unique().notNull(),
     storagePath: text("path").notNull(),
     language: text("language").default("plaintext"),
-    viewed: integer("viewed").default(0),
+    views: integer("views").default(0),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),
     expiresAt: timestamp("expires_at").default(sql`NOW() + INTERVAL '7 days'`),
+
+    maxViews: integer("max_views").default(-1),
+    accessPassword: text("access_password").unique(),
   },
   (t) => [
     pgPolicy(`anon-readonly`, {

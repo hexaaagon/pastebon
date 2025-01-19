@@ -11,12 +11,21 @@ export const createSchema = zfd
     file: zfd.file(),
     adminPassword: z.string().nullish(),
     language: languageSchema.default("plaintext"),
+    options: z
+      .object({
+        expiresAt: z.string().optional(),
+        accessPassword: z.string().optional(),
+        maxViews: z.number().int().optional(),
+      })
+      .nullish(),
   })
   .refine((args) => args.file.size <= fileSizeLimit * 1024 * 1024, {
     message: `File size should not exceed ${fileSizeLimit}MB`,
   });
 
 export enum ErrorPages {
-  NoPasteFound = "/error-pages/no-paste-found",
   NotFound = "/error-pages/not-found",
+
+  PasteNotFound = "/error-pages/paste-not-found",
+  PasteExpired = "/error-pages/paste-expired",
 }
