@@ -8,7 +8,7 @@ export async function GET(
     params: Promise<{ id: string }>;
   },
 ) {
-  const code = await viewCode((await params).id);
+  const code = await viewCode({ id: (await params).id });
 
   if (!code.success)
     return new Response("Paste not found.", {

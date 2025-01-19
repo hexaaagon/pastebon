@@ -10,6 +10,9 @@
     "deploy-with-docker",
     "deploy-with-vercel",
     "---API References---",
-    "api-route"
+    "api-route",
+    "---Legal---",
+    "privacy",
+    "terms"
   ]
 }
