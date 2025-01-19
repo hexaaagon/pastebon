@@ -13,25 +13,22 @@ export async function POST(req: Request) {
   if (pasteDatabase.error) return Response.json({ success: false });
 
   const storage = supabase.storage.from("paste");
-  const storageList = await storage.list();
+  const storageList = await storage.list("pastes");
 
   if (storageList.error) return Response.json({ success: false });
 
   const databaseIds = pasteDatabase.data.map((paste) => paste.id);
   const storageIds = storageList.data.map((file) => file.name.split(".")[0]);
 
-  const missingInDatabase = storageIds.filter(
-    (id) => !databaseIds.includes(id),
+  const missingInDatabase = databaseIds.filter(
+    (id) => !storageIds.includes(id),
   );
-  const missingInStorage = databaseIds.filter((id) => !storageIds.includes(id));
+  const missingInStorage = storageIds.filter((id) => !databaseIds.includes(id));
 
-  for (const id of missingInDatabase) {
-    await storage.remove([`${id}.txt`]);
-  }
+  console.log({ missingInDatabase, missingInStorage });
 
-  for (const id of missingInStorage) {
-    await supabase.from("paste").delete().eq("id", id);
-  }
+  await storage.remove(missingInStorage.map((id) => `pastes/${id}.txt`));
+  await supabase.from("paste").delete().in("id", missingInDatabase);
 
   return Response.json({ success: true });
 }

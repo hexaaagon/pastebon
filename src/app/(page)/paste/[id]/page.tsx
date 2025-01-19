@@ -15,7 +15,8 @@ function relativeTime(date: string): string {
   const past = new Date(date);
   const diff = Math.floor((now.getTime() - past.getTime()) / 1000);
 
-  if (diff < 60) return `${diff} second${diff !== 1 ? "s" : ""} ago`;
+  if (diff < 60)
+    return `${diff} second${diff !== 1 ? "s" : ""} ago`.replace("-", "");
   const minutes = Math.floor(diff / 60);
   if (minutes < 60) return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
   const hours = Math.floor(minutes / 60);
