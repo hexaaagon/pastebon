@@ -150,11 +150,11 @@ export function CreateCodeEditor({
 
     toast.promise(postCodeAction(formData), {
       loading: "Submitting your Paste Code...",
+      error: async (err) => {
+        return `${err}`;
+      },
       success: async (data) => {
-        if (!data.success)
-          return `Error while submitting your Paste Code. ${data.error}`;
-
-        router.push(`/paste/${data.data.id}`);
+        router.push(`/paste/${data.id}`);
 
         return (
           <div className="space-y-2">
@@ -168,7 +168,7 @@ export function CreateCodeEditor({
                 </Button>
               </DialogTrigger>
               <DialogContent>
-                <DoneDialog id={data.data.id} password={data.data.password} />
+                <DoneDialog id={data.id} password={data.password} />
               </DialogContent>
             </Dialog>
           </div>

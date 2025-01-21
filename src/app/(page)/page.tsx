@@ -5,17 +5,6 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreateCodeEditor } from "@/components/create-code-editor";
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { DoneDialog } from "@/components/done-dialog";
-
 export default function Landing() {
   const [code, setCode] = useState("");
 

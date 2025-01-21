@@ -1,13 +1,16 @@
 "use server";
+import argon2 from "@node-rs/argon2";
+
 import { languageValues } from "@/config/code";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
 import { createSchema, pasteIdLength } from "@/lib/constants";
+import rateLimit from "@/lib/rate-limit";
 
 import { createServiceServer } from "../supabase/service-server";
 import { nanoid } from "@/lib/utils";
-import argon2 from "@node-rs/argon2";
+import { headers } from "next/headers";
 
 type ActionResult<T = unknown> =
   | {
@@ -23,44 +26,71 @@ const schema = zfd.formData({
   language: languageSchema.default("plaintext"),
 });
 
+const createPasteLimiter = rateLimit({
+  interval: 60 * 1000, // 1 minute
+  uniqueTokenPerInterval: 50, // Max 50 users per minute
+});
+
+const viewPasteLimiter = rateLimit({
+  interval: 60 * 1000, // 1 minute
+  uniqueTokenPerInterval: 100, // Max 100 users per minute
+});
+
+async function getUserIP() {
+  const header = await headers();
+  return (
+    header.get("x-real-ip") ||
+    header.get("x-forwarded-for") ||
+    "IP-NOT-DETECTED"
+  );
+}
+
 export async function postCodeAction(
   form: FormData,
-): Promise<ActionResult<{ id: string; password: string }>> {
-  let data: typeof schema._type;
+): Promise<{ id: string; password: string }> {
+  return await new Promise(async (resolve, reject) => {
+    let data: typeof schema._type;
 
-  try {
-    data = schema.parse(form);
-  } catch (err) {
-    if (err instanceof z.ZodError) {
-      return {
-        success: false,
-        error: err.flatten().fieldErrors,
-      };
-    } else {
-      return {
-        success: false,
-        error: err,
-      };
+    try {
+      data = schema.parse(form);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return reject(err.flatten().fieldErrors);
+      } else {
+        return reject(err);
+      }
     }
-  }
 
-  const formData = new FormData();
-  formData.append(
-    "file",
-    new File([data.code], "code.txt", { type: "text/plain" }),
-  );
-  formData.append("language", data.language);
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  data.adminPassword && formData.append("adminPassword", data.adminPassword);
+    const formData = new FormData();
+    formData.append(
+      "file",
+      new File([data.code], "code.txt", { type: "text/plain" }),
+    );
+    formData.append("language", data.language);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    data.adminPassword && formData.append("adminPassword", data.adminPassword);
 
-  const code = await createCode(createSchema.parse(formData));
+    const code = await createCode(createSchema.parse(formData));
 
-  return code;
+    return code.success ? resolve(code.data) : reject(code.error);
+  });
 }
 
 export async function createCode(
   formData: typeof createSchema._type,
+  ip?: string,
 ): Promise<ActionResult<{ id: string; password: string }>> {
+  ip = ip || (await getUserIP());
+
+  const rateLimit = createPasteLimiter.check(1, ip);
+
+  if (rateLimit.rateLimited) {
+    return {
+      success: false,
+      error: "Rate limit exceeded",
+    };
+  }
+
   const supabase = createServiceServer();
   const id = nanoid(pasteIdLength);
 
@@ -104,13 +134,16 @@ export async function createCode(
   };
 }
 
-export async function viewCode({
-  id,
-  accessPassword,
-}: {
-  id: string;
-  accessPassword?: string;
-}): Promise<
+export async function viewCode(
+  {
+    id,
+    accessPassword,
+  }: {
+    id: string;
+    accessPassword?: string;
+  },
+  ip?: string,
+): Promise<
   ActionResult<{
     paste: string;
     language: string;
@@ -119,6 +152,17 @@ export async function viewCode({
     expiresAt: string;
   }>
 > {
+  ip = ip || (await getUserIP());
+
+  const rateLimit = viewPasteLimiter.check(10, ip);
+
+  if (rateLimit.rateLimited) {
+    return {
+      success: false,
+      error: "Rate limit exceeded",
+    };
+  }
+
   const supabase = createServiceServer();
   const pasteDatabase = await supabase
     .from("paste")

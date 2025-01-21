@@ -3,30 +3,10 @@ import { z } from "zod";
 
 import { createCode } from "@/lib/actions/code";
 import { createSchema } from "@/lib/constants";
-import rateLimit from "@/lib/rate-limit";
-
-const limiter = rateLimit({
-  interval: 60 * 1000, // 1 minute
-  uniqueTokenPerInterval: 50, // Max 50 users per minute
-});
 
 export async function PUT(req: Request) {
   let formData: typeof createSchema._type;
-  const ip = ipAddress(req) || "IP-NOT-DETECTED";
-
-  const rateLimit = limiter.check(5, ip);
-
-  if (rateLimit.rateLimited) {
-    return Response.json(
-      {
-        success: false,
-        error: "Rate limit exceeded",
-      },
-      {
-        status: 429,
-      },
-    );
-  }
+  const ip = ipAddress(req);
 
   try {
     formData = createSchema.parse(await req.formData());
@@ -56,7 +36,7 @@ export async function PUT(req: Request) {
     }
   }
 
-  const code = await createCode(formData);
+  const code = await createCode(formData, ip);
 
   return Response.json(code, {
     status: code.success ? 201 : 400,
