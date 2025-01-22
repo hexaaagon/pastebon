@@ -82,7 +82,7 @@ export async function createCode(
 ): Promise<ActionResult<{ id: string; password: string }>> {
   ip = ip || (await getUserIP());
 
-  const rateLimit = createPasteLimiter.check(1, ip);
+  const rateLimit = createPasteLimiter.check(5, ip);
 
   if (rateLimit.rateLimited) {
     return {
