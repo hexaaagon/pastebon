@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,6 +20,7 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { UnsavedGateway } from "@/components/unsaved-gateway";
 
 const data = {
   navMain: [
@@ -42,6 +43,8 @@ export function AppSidebar({
 }: React.ComponentProps<typeof Sidebar> & {
   type: "default" | "docs";
 }) {
+  const [clicked, setClicked] = useState<boolean>(false);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -78,15 +81,22 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain />
+        <NavMain clicked={clicked} setClicked={setClicked} />
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenuButton asChild size="sm" tooltip="Settings">
-          <Link href="/settings">
-            <Settings />
-            <span>Settings</span>
-          </Link>
-        </SidebarMenuButton>
+        <UnsavedGateway
+          clicked={clicked}
+          setClicked={setClicked}
+          sidebarMenuButtonProps={{
+            asChild: true,
+            size: "sm",
+            tooltip: "Settings",
+          }}
+          linkProps={{ href: "/settings" }}
+        >
+          <Settings />
+          <span>Settings</span>
+        </UnsavedGateway>
         <SidebarMenuButton asChild size="sm" tooltip="Open Sidebar">
           <SidebarTrigger size="sm" className="justify-start">
             Close Sidebar

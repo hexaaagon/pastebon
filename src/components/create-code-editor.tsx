@@ -5,6 +5,8 @@ import { type editor as MonacoEditor } from "monaco-editor";
 import { format as prettierFormat } from "prettier/standalone";
 import { CodeEditor } from "./code-editor";
 
+import { StoreActions, StoreType, store } from "@/lib/store";
+
 import {
   type Dispatch,
   type SetStateAction,
@@ -40,7 +42,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SplitButton } from "@/components/ui/split-button";
-import { DoneDialog } from "./done-dialog";
+import { DoneDialog } from "@/components/done-dialog";
 
 export function CreateCodeEditor({
   code,
@@ -53,6 +55,8 @@ export function CreateCodeEditor({
   const [formatLoading, setFormatLoading] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>("plaintext");
   const [editor, setEditor] = useState<MonacoEditor.IStandaloneCodeEditor>();
+
+  const storeActions = store.getActions() as StoreActions;
 
   const router = useRouter();
 
@@ -133,9 +137,15 @@ export function CreateCodeEditor({
       }
     }
 
-    window.onbeforeunload = () => (code === "" ? null : true);
+    if (code !== "") {
+      storeActions.setIsEditingCode(true);
+    } else {
+      storeActions.setIsEditingCode(false);
+    }
 
     document.addEventListener("keydown", handleKeyDown);
+    window.onbeforeunload = () => (code === "" ? null : true);
+
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       window.onbeforeunload = null;

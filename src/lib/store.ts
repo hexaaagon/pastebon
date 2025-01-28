@@ -8,6 +8,13 @@ export const store = createStore(
         state.sidebarOpened = sidebar;
       },
     ),
+
+    isEditingCode: false,
+    setIsEditingCode: action(
+      (state: StoreType, editing: StoreType["isEditingCode"]) => {
+        state.isEditingCode = editing;
+      },
+    ),
   } as StoreType & StoreActions,
   {
     name: "PastebonStore",
@@ -16,8 +23,10 @@ export const store = createStore(
 
 export interface StoreType {
   sidebarOpened?: boolean;
+  isEditingCode?: boolean;
 }
 
 export interface StoreActions {
   setSidebarOpen: any;
+  setIsEditingCode: any;
 }
