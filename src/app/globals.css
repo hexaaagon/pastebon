@@ -73,6 +73,7 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
 @layer base {
   * {
     @apply border-border;
@@ -81,6 +82,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Monaco Editor - By JustDeveloper */
+.monaco-editor {
+    padding-top: 10px;
+}
+.light .monaco-editor {
+    padding-top: 0px;
+}
+
+/* Scrollbar */
 
 ::-webkit-scrollbar {
   @apply h-2.5 w-2.5;
