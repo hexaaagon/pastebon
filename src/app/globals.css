@@ -99,5 +99,5 @@
     padding-top: 10px;
 }
 .light .monaco-editor {
-    padding-top: 0px; /* Because it already have padding-top */
+    padding-top: 0px; /* Because it already have padding-top for light theme for some reason */
 }
