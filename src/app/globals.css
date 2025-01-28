@@ -98,3 +98,6 @@
 .monaco-editor {
     padding-top: 10px;
 }
+.light .monaco-editor {
+    padding-top: 0px; /* Because it already have padding-top */
+}
