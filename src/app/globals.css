@@ -93,3 +93,8 @@
 ::-webkit-scrollbar-thumb {
   @apply rounded-full border-[1px] border-solid border-transparent bg-border bg-clip-padding;
 }
+
+/* padding-top solution by JustDeveloper */
+.monaco-editor {
+    padding-top: 10px;
+}
