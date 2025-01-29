@@ -9,6 +9,12 @@ import prettierParserMarkdown from "prettier/plugins/markdown";
 import prettierParserTypescript from "prettier/plugins/typescript";
 import prettierParserYaml from "prettier/plugins/yaml";
 
+// @ts-expect-error - no types
+import prettierParserPhp from "@prettier/plugin-php/standalone";
+import prettierParserXml from "@prettier/plugin-xml";
+import prettierParserJava from "prettier-plugin-java";
+import prettierParserSql from "prettier-plugin-sql";
+
 import { type LucideIcon, File, FileType2 } from "lucide-react";
 import {
   type IconType,
@@ -183,6 +189,37 @@ export function parser(options?: PrettierOptions): {
       },
     },
 
-    // TODO: Add more language support using prettier plugins
+    php: {
+      provider: "prettier",
+      options: {
+        parser: "php",
+        plugins: [prettierParserPhp],
+        ...options,
+      },
+    },
+    xml: {
+      provider: "prettier",
+      options: {
+        parser: "xml",
+        plugins: [prettierParserXml],
+        ...options,
+      },
+    },
+    java: {
+      provider: "prettier",
+      options: {
+        parser: "java",
+        plugins: [prettierParserJava],
+        ...options,
+      },
+    },
+    sql: {
+      provider: "prettier",
+      options: {
+        parser: "sql",
+        plugins: [prettierParserSql],
+        ...options,
+      },
+    },
   };
 }
