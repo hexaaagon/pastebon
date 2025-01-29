@@ -23,8 +23,9 @@ export function UnsavedGateway({
 
   sidebarMenuButtonProps?: React.ComponentProps<typeof SidebarMenuButton>;
   buttonProps?: Omit<React.ComponentProps<"button">, "onClick">;
-  linkProps: LinkProps;
+  linkProps: Omit<LinkProps, "onClick">;
 }) {
+  const storeActions = store.getActions() as StoreActions;
   const isEditingCode = useStoreState(
     (state: StoreType) => state.isEditingCode,
   );
@@ -47,7 +48,14 @@ export function UnsavedGateway({
           {children}
         </button>
       ) : (
-        <Link {...linkProps}>{children}</Link>
+        <Link
+          onClick={() => {
+            storeActions.setIsEditingCode(false);
+          }}
+          {...linkProps}
+        >
+          {children}
+        </Link>
       )}
     </SidebarMenuButton>
   );
