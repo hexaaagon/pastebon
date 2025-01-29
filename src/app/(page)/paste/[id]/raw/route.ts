@@ -11,8 +11,8 @@ export async function GET(
   const code = await viewCode({ id: (await params).id });
 
   if (!code.success)
-    return new Response("Paste not found.", {
-      status: 404,
+    return Response.json(code, {
+      status: 400,
     });
 
   return new Response(code.data.paste, {
