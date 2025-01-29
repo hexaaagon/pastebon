@@ -5,7 +5,7 @@ import { type editor as MonacoEditor } from "monaco-editor";
 import { format as prettierFormat } from "prettier/standalone";
 import { CodeEditor } from "./code-editor";
 
-import { StoreActions, StoreType, store } from "@/lib/store";
+import { store } from "@/lib/store";
 
 import {
   type Dispatch,
@@ -56,7 +56,7 @@ export function CreateCodeEditor({
   const [language, setLanguage] = useState<string>("plaintext");
   const [editor, setEditor] = useState<MonacoEditor.IStandaloneCodeEditor>();
 
-  const storeActions = store.getActions() as StoreActions;
+  const storeActions = store.getActions();
 
   const router = useRouter();
 

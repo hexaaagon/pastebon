@@ -3,9 +3,8 @@ import Link, { LinkProps } from "next/link";
 import type React from "react";
 import { toast } from "sonner";
 
-import { StoreActions, StoreType, store } from "@/lib/store";
+import { StoreType, store } from "@/lib/store";
 import { useStoreState } from "easy-peasy";
-import { Settings } from "lucide-react";
 import { SidebarMenuButton } from "./ui/sidebar";
 
 export function UnsavedGateway({
@@ -25,7 +24,7 @@ export function UnsavedGateway({
   buttonProps?: Omit<React.ComponentProps<"button">, "onClick">;
   linkProps: Omit<LinkProps, "onClick">;
 }) {
-  const storeActions = store.getActions() as StoreActions;
+  const storeActions = store.getActions();
   const isEditingCode = useStoreState(
     (state: StoreType) => state.isEditingCode,
   );

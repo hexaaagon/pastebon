@@ -5,7 +5,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
 
-import { StoreActions, StoreType, store } from "@/lib/store";
+import { StoreType, store } from "@/lib/store";
 import { useStoreState } from "easy-peasy";
 
 import { useIsMobile } from "@/lib/hooks/use-mobile";
@@ -72,9 +72,9 @@ const SidebarProvider = React.forwardRef<
   ) => {
     const isMobile = useIsMobile();
     const [openMobile, setOpenMobile] = React.useState(false);
-    const storeActions = store.getActions() as StoreActions;
+    const storeActions = store.getActions();
     const sidebarOpen = useStoreState(
-      (state: StoreType) => state.sidebarOpened!,
+      (state: StoreType) => state.sidebarOpened,
     );
 
     // This is the internal state of the sidebar.
