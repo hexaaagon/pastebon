@@ -9,10 +9,6 @@ import prettierParserMarkdown from "prettier/plugins/markdown";
 import prettierParserTypescript from "prettier/plugins/typescript";
 import prettierParserYaml from "prettier/plugins/yaml";
 
-// @ts-expect-error - no types
-import prettierParserPhp from "@prettier/plugin-php/standalone";
-import prettierParserSql from "prettier-plugin-sql";
-
 import { File, FileType2 } from "lucide-react";
 import {
   type IconType,
@@ -183,23 +179,6 @@ export function parser(options?: PrettierOptions): {
       options: {
         parser: "yaml",
         plugins: [prettierParserYaml],
-        ...options,
-      },
-    },
-
-    php: {
-      provider: "prettier",
-      options: {
-        parser: "php",
-        plugins: [prettierParserPhp],
-        ...options,
-      },
-    },
-    sql: {
-      provider: "prettier",
-      options: {
-        parser: "sql",
-        plugins: [prettierParserSql],
         ...options,
       },
     },
