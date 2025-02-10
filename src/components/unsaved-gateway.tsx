@@ -38,6 +38,14 @@ export function UnsavedGateway({
               "You have unsaved changes. Please save your code before leaving.",
               {
                 description: "You can click again to proceed.",
+                duration: 5000,
+
+                onAutoClose: () => {
+                  if (!clicked) setClicked(false);
+                },
+                onDismiss: () => {
+                  if (!clicked) setClicked(false);
+                },
               },
             );
             setClicked(true);

@@ -56,6 +56,8 @@ export function CreateCodeEditor({
   const [language, setLanguage] = useState<string>("plaintext");
   const [editor, setEditor] = useState<MonacoEditor.IStandaloneCodeEditor>();
 
+  const supportedLanguages = Object.keys(parser());
+
   const storeActions = store.getActions();
 
   const router = useRouter();
@@ -71,8 +73,6 @@ export function CreateCodeEditor({
         },
       });
     setFormatLoading(true);
-
-    const supportedLanguages = Object.keys(parser());
 
     if (!supportedLanguages.includes(language)) {
       setFormatLoading(false);
@@ -228,14 +228,16 @@ export function CreateCodeEditor({
               </>
             ) : (
               <>
-                <Button
-                  onClick={() => formatCode()}
-                  className="flex items-center gap-2"
-                  disabled={formatLoading}
-                >
-                  <Sparkles size={16} className="size-2 sm:size-4" />
-                  Format
-                </Button>
+                {supportedLanguages.includes(language) && (
+                  <Button
+                    onClick={() => formatCode()}
+                    className="flex items-center gap-2"
+                    disabled={formatLoading}
+                  >
+                    <Sparkles size={16} className="size-2 sm:size-4" />
+                    Format
+                  </Button>
+                )}
                 <SplitButton
                   buttonChildren={
                     <>
