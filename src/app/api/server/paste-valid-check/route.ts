@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   if (!check.success) return Response.json(check, { status: 401 });
 
   const supabase = createServiceServer();
-  const pasteDatabase = await supabase.from("paste").select("id");
+  const pasteDatabase = await supabase.from("paste").select("id, expires_at");
 
   if (pasteDatabase.error) return Response.json({ success: false });
 
@@ -20,12 +20,18 @@ export async function POST(req: Request) {
   const databaseIds = pasteDatabase.data.map((paste) => paste.id);
   const storageIds = storageList.data.map((file) => file.name.split(".")[0]);
 
-  const missingInDatabase = databaseIds.filter(
-    (id) => !storageIds.includes(id),
-  );
-  const missingInStorage = storageIds.filter((id) => !databaseIds.includes(id));
+  const currentTime = new Date().getTime();
 
-  console.log({ missingInDatabase, missingInStorage });
+  const missingInDatabase = databaseIds.filter((id, index) => {
+    const paste = pasteDatabase.data[index];
+    const pasteTime = paste.expires_at && new Date(paste.expires_at).getTime();
+
+    if (!storageIds.includes(id)) {
+      return pasteTime && pasteTime > currentTime;
+    }
+    return false;
+  });
+  const missingInStorage = storageIds.filter((id) => !databaseIds.includes(id));
 
   await storage.remove(missingInStorage.map((id) => `pastes/${id}.txt`));
   await supabase.from("paste").delete().in("id", missingInDatabase);
