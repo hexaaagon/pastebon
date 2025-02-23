@@ -164,6 +164,7 @@ export function CreateCodeEditor({
         return `${err}`;
       },
       success: async (data) => {
+        storeActions.setIsEditingCode(false);
         router.push(`/paste/${data.id}`);
 
         return (
