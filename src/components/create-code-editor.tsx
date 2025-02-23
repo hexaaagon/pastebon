@@ -243,7 +243,7 @@ export function CreateCodeEditor({
                   buttonChildren={
                     <>
                       <SendHorizonal size={16} className="size-2 sm:size-4" />
-                      Paste
+                      Submit
                     </>
                   }
                   dropdownChildren={
