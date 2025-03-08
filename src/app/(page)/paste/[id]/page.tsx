@@ -1,16 +1,11 @@
-"use client";
-import { useParams } from "next/navigation";
-import { useEffect } from "react";
 import Image from "next/image";
 
 import { Calendar, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ViewCodeEditor } from "@/components/view-code-editor";
 
-import useSWRImmutable from "swr/immutable";
-import fetcher from "@/lib/fetch";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
+import { viewCode } from "@/lib/actions/code";
 
 function relativeTime(date: string): string {
   const now = new Date(new Date().toLocaleString("en", { timeZone: "UTC" }));
@@ -27,32 +22,12 @@ function relativeTime(date: string): string {
   return `${days} day${days !== 1 ? "s" : ""} ago`;
 }
 
-export default function ViewCode() {
-  const params = useParams<{ id: string }>();
-
-  const { data, isLoading } = useSWRImmutable<
-    | {
-        success: true;
-        data: {
-          paste: string;
-          language: string;
-          views: number;
-          createdAt: string;
-          expiresAt: string;
-        };
-      }
-    | { success: false; error: any }
-  >(`/api/paste/${params.id}/view`, fetcher);
-
-  useEffect(() => {
-    if (!data) return;
-
-    if (!data.success) {
-      toast.error(`Error: ${data.error || "An error occurred."}`, {
-        duration: 30000,
-      });
-    }
-  }, [data]);
+export default async function ViewCode({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const data = await viewCode({ id: (await params).id });
 
   return (
     <main className="p-8 px-10">
@@ -86,7 +61,7 @@ export default function ViewCode() {
           <span className="flex items-center justify-end gap-2">
             <span className="flex items-center gap-1">
               <Eye size={20} />
-              {isLoading || !data?.success ? (
+              {!data?.success ? (
                 <Skeleton className="h-4 w-6" />
               ) : (
                 <p className="text-sm">{data!.data?.views}</p>
@@ -94,7 +69,7 @@ export default function ViewCode() {
             </span>
             <span className="flex items-center gap-1">
               <Calendar size={20} />
-              {isLoading || !data?.success ? (
+              {!data?.success ? (
                 <Skeleton className="h-4 w-20" />
               ) : (
                 <p className="text-sm">{relativeTime(data!.data?.createdAt)}</p>
@@ -103,17 +78,13 @@ export default function ViewCode() {
           </span>
         </CardHeader>
         <CardContent className="-mt-4">
-          {isLoading || !data?.success ? (
+          {!data?.success ? (
             <Skeleton className="h-[calc(60vh)] w-full" />
           ) : (
             <ViewCodeEditor
-              language={
-                isLoading || !data?.success ? "plaintext" : data!.data?.language
-              }
-              code={
-                isLoading || !data?.success ? "Loading..." : data!.data?.paste
-              }
-              id={params.id}
+              language={!data?.success ? "plaintext" : data!.data?.language}
+              code={!data?.success ? "Loading..." : data!.data?.paste}
+              id={(await params).id}
             />
           )}
         </CardContent>
