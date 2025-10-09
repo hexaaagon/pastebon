@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CreateCodeEditor } from "@/components/create-code-editor";
 
 export default function Landing() {
@@ -28,7 +28,7 @@ export default function Landing() {
             priority
             className="block size-6 items-center dark:hidden"
           />
-          <p className="font-grotesque text-xl font-medium">Pastebon</p>
+          <p className="font-grotesque font-medium text-xl">Pastebon</p>
         </span>
         <p className="text-sm">
           Paste your codes, logs, and errors{" "}
