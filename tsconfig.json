@@ -22,8 +22,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "contentlayer/generated": ["./.contentlayer/generated"]
-    },
-    "baseUrl": "./"
+    }
   },
   "include": [
     "next-env.d.ts",
