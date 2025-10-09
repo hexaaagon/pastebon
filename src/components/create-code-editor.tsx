@@ -1,7 +1,7 @@
 "use client";
 import { postCodeAction } from "@/lib/actions/code";
 import { languages, parser } from "@/config/code";
-import { type editor as MonacoEditor } from "monaco-editor";
+import type { editor as MonacoEditor } from "monaco-editor";
 import { format as prettierFormat } from "prettier/standalone";
 import { CodeEditor } from "./code-editor";
 
@@ -17,17 +17,10 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { Check, SendHorizonal, Sparkles } from "lucide-react";
+import { Check, File, SendHorizonal, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenuItem,
   DropdownMenuSub,
@@ -43,6 +36,7 @@ import {
 } from "@/components/ui/select";
 import { SplitButton } from "@/components/ui/split-button";
 import { DoneDialog } from "@/components/done-dialog";
+import { SiJavascript, SiPython } from "@icons-pack/react-simple-icons";
 
 export function CreateCodeEditor({
   code,
@@ -82,16 +76,16 @@ export function CreateCodeEditor({
       });
     }
 
-    let startTime = Date.now();
+    const startTime = Date.now();
     prettierFormat(code, parser()[language].options)
       .then((str) => {
         setCode(str);
-        let endTime = Date.now();
+        const endTime = Date.now();
         setFormatLoading(false);
         toast.success(`Formatted Successfully (${endTime - startTime}ms)`);
       })
       .catch((e) => {
-        let endTime = Date.now();
+        const endTime = Date.now();
         setFormatLoading(false);
         toast.error("Error on Formatting", {
           description: `${
@@ -125,6 +119,7 @@ export function CreateCodeEditor({
     };
   }, [editor]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: it's not mandatory
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.repeat) return;
@@ -150,10 +145,9 @@ export function CreateCodeEditor({
       document.removeEventListener("keydown", handleKeyDown);
       window.onbeforeunload = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, language]);
 
-  const submitCode = async (lang: "dynamic" | "plaintext") => {
+  const submitCode = async (lang: "dynamic" | string) => {
     const formData = new FormData();
     formData.append("code", code);
     formData.append("language", lang === "dynamic" ? language : lang);
@@ -169,7 +163,7 @@ export function CreateCodeEditor({
 
         return (
           <div className="space-y-2">
-            <span className="flex items-center gap-2 text-sm font-medium">
+            <span className="flex items-center gap-2 font-medium text-sm">
               <Check size={18} /> Done!
             </span>
             <Dialog>
@@ -194,7 +188,7 @@ export function CreateCodeEditor({
       code={code}
       setCode={setCode}
       language={language}
-      onMount={(editor, monaco) => {
+      onMount={(editor, _monaco) => {
         setEditor(editor);
       }}
       navChildren={
@@ -256,7 +250,20 @@ export function CreateCodeEditor({
                           <DropdownMenuItem
                             onClick={() => submitCode("dynamic")}
                           >
+                            <File />
                             Plain Text
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => submitCode("javascript")}
+                          >
+                            <SiJavascript />
+                            JavaScript
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => submitCode("python")}
+                          >
+                            <SiPython />
+                            Python
                           </DropdownMenuItem>
                         </DropdownMenuSubContent>
                       </DropdownMenuSub>
