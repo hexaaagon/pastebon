@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { type NextRequest, NextResponse } from "next/server";
+import type { NextRequest, NextResponse } from "next/server";
 
 import pasteHandler from "./paste-handler";
 
@@ -7,7 +7,7 @@ const middlewares: ((
   req: NextRequest,
   res: NextResponse,
   supabase: SupabaseClient,
-) => Promise<NextResponse | void> | void)[] = [pasteHandler];
+) => Promise<NextResponse | undefined> | void)[] = [pasteHandler];
 
 export default async function middleware(
   req: NextRequest,
