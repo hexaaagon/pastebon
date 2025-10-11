@@ -85,14 +85,13 @@
 
 /* Monaco Editor - By JustDeveloper */
 .monaco-editor {
-    padding-top: 10px;
+  padding-top: 10px;
 }
 .light .monaco-editor {
-    padding-top: 0px;
+  padding-top: 0px;
 }
 
 /* Scrollbar */
-
 ::-webkit-scrollbar {
   @apply h-2.5 w-2.5;
 }

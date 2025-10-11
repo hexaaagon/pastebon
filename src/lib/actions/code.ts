@@ -22,6 +22,8 @@ type ActionResult<T = unknown> =
 const languageSchema = z.enum(languageValues);
 const schema = zfd.formData({
   code: z.string(),
+  title: z.string().nullish(),
+  description: z.string().nullish(),
   adminPassword: z.string().nullish(),
   language: languageSchema.default("plaintext"),
 });
@@ -48,8 +50,9 @@ async function getUserIP() {
 export async function postCodeAction(
   form: FormData,
 ): Promise<{ id: string; password: string }> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: needed for async operations
   return await new Promise(async (resolve, reject) => {
-    let data: typeof schema._type;
+    let data: z.infer<typeof schema>;
 
     try {
       data = schema.parse(form);
@@ -67,7 +70,8 @@ export async function postCodeAction(
       new File([data.code], "code.txt", { type: "text/plain" }),
     );
     formData.append("language", data.language);
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    data.title && formData.append("title", data.title);
+    data.description && formData.append("description", data.description);
     data.adminPassword && formData.append("adminPassword", data.adminPassword);
 
     const code = await createCode(createSchema.parse(formData));
@@ -77,7 +81,7 @@ export async function postCodeAction(
 }
 
 export async function createCode(
-  formData: typeof createSchema._type,
+  formData: z.infer<typeof createSchema>,
   ip?: string,
 ): Promise<ActionResult<{ id: string; password: string }>> {
   ip = ip || (await getUserIP());
@@ -116,6 +120,8 @@ export async function createCode(
 
   await supabase.from("paste").insert({
     id,
+    title: formData.title || null,
+    description: formData.description || null,
     path: `pastes/${id}.txt`,
     admin_password: formData.adminPassword,
     language: formData.language,
@@ -146,6 +152,8 @@ export async function viewCode(
 ): Promise<
   ActionResult<{
     paste: string;
+    title: string | null;
+    description: string | null;
     language: string;
     views: number;
     createdAt: string;
@@ -225,6 +233,8 @@ export async function viewCode(
     success: true,
     data: {
       paste,
+      title: pasteDatabase.data.title || null,
+      description: pasteDatabase.data.description || null,
       language: pasteDatabase.data.language || "plaintext",
       views: (pasteDatabase.data.views || 0) + 1,
       createdAt: pasteDatabase.data.created_at!,

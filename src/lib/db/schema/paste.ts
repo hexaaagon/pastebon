@@ -16,6 +16,8 @@ export const pasteTable = pgTable(
       .primaryKey()
       .unique()
       .$defaultFn(() => nanoid()),
+    title: text("title"),
+    description: text("description"),
     adminPassword: text("admin_password").unique().notNull(),
     storagePath: text("path").notNull(),
     language: text("language").default("plaintext"),
@@ -27,7 +29,7 @@ export const pasteTable = pgTable(
     maxViews: integer("max_views").default(-1),
     accessPassword: text("access_password").unique(),
   },
-  (t) => [
+  (_t) => [
     pgPolicy(`anon-readonly`, {
       as: "permissive",
       for: "select",

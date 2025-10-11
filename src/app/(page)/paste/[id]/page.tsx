@@ -49,7 +49,7 @@ export default async function ViewCode({
             priority
             className="block size-6 items-center dark:hidden"
           />
-          <p className="font-grotesque text-xl font-medium">Pastebon</p>
+          <p className="font-grotesque font-medium text-xl">Pastebon</p>
         </span>
         <p className="text-sm">
           Paste your codes, logs, and errors{" "}
@@ -58,13 +58,27 @@ export default async function ViewCode({
       </header>
       <Card>
         <CardHeader>
+          {data?.success && (data.data.title || data.data.description) && (
+            <div className="mb-4">
+              {data.data.title && (
+                <CardTitle className="font-semibold text-2xl md:text-3xl">
+                  {data.data.title}
+                </CardTitle>
+              )}
+              {data.data.description && (
+                <p className="mt-2 text-muted-foreground text-sm">
+                  {data.data.description}
+                </p>
+              )}
+            </div>
+          )}
           <span className="flex items-center justify-end gap-2">
             <span className="flex items-center gap-1">
               <Eye size={20} />
               {!data?.success ? (
                 <Skeleton className="h-4 w-6" />
               ) : (
-                <p className="text-sm">{data!.data?.views}</p>
+                <p className="text-sm">{data?.data?.views}</p>
               )}
             </span>
             <span className="flex items-center gap-1">
@@ -72,7 +86,7 @@ export default async function ViewCode({
               {!data?.success ? (
                 <Skeleton className="h-4 w-20" />
               ) : (
-                <p className="text-sm">{relativeTime(data!.data?.createdAt)}</p>
+                <p className="text-sm">{relativeTime(data?.data?.createdAt)}</p>
               )}
             </span>
           </span>
@@ -82,8 +96,8 @@ export default async function ViewCode({
             <Skeleton className="h-[calc(60vh)] w-full" />
           ) : (
             <ViewCodeEditor
-              language={!data?.success ? "plaintext" : data!.data?.language}
-              code={!data?.success ? "Loading..." : data!.data?.paste}
+              language={!data?.success ? "plaintext" : data?.data?.language}
+              code={!data?.success ? "Loading..." : data?.data?.paste}
               id={(await params).id}
             />
           )}

@@ -1,9 +1,9 @@
 "use client";
 import MonacoCodeEditor, {
-  Monaco,
+  type Monaco,
   type EditorProps,
 } from "@monaco-editor/react";
-import { type editor as MonacoEditor } from "monaco-editor";
+import type { editor as MonacoEditor } from "monaco-editor";
 import OneDarkPro from "@/lib/theme/onedarkpro.json";
 
 import { useTheme } from "next-themes";
@@ -50,7 +50,7 @@ export function CodeEditor({
 
   useEffect(() => {
     if (!monaco) return;
-  }, [monaco, resolvedTheme]);
+  }, [monaco]);
 
   return (
     <div className="space-y-4">
@@ -69,13 +69,12 @@ export function CodeEditor({
               ...OneDarkPro,
             });
           }}
-          onChange={(str) => setCode && setCode(str || "")}
+          onChange={(str) => setCode?.(str || "")}
           onMount={(editor, monaco) => {
             setEditor(editor);
             setMonaco(monaco);
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            onMount && onMount(editor, monaco);
+            onMount?.(editor, monaco);
 
             // Disable syntax errors
             monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions(
@@ -92,7 +91,12 @@ export function CodeEditor({
             );
           }}
           options={{
-            fontFamily: "geistMono",
+            fontFamily:
+              "var(--font-geist-mono), 'Geist Mono', Consolas, 'Courier New', monospace",
+            fontSize: 14,
+            fontLigatures: true,
+            lineHeight: 1.6,
+            letterSpacing: 0,
             minimap: {
               enabled: false,
             },

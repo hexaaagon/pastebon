@@ -9,6 +9,8 @@ const languageSchema = z.enum(languageValues);
 export const createSchema = zfd
   .formData({
     file: zfd.file(),
+    title: z.string().nullish(),
+    description: z.string().nullish(),
     adminPassword: z.string().nullish(),
     language: languageSchema.default("plaintext"),
     options: z
