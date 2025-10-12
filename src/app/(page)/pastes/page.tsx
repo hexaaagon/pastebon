@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ExternalLink, Loader2 } from "lucide-react";
+import { BookCopy, Loader2 } from "lucide-react";
 
 import { usePasteHistory } from "@/lib/storage/hooks";
 import { PasteItem } from "@/components/paste-item";
@@ -105,7 +105,7 @@ export default function PasteHistoryPage() {
         <Empty>
           <EmptyHeader>
             <EmptyMedia variant="icon">
-              <ExternalLink />
+              <BookCopy />
             </EmptyMedia>
             <EmptyTitle>No pastes yet</EmptyTitle>
             <EmptyDescription>
@@ -118,7 +118,7 @@ export default function PasteHistoryPage() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <ExternalLink className="size-5" />
+              <BookCopy className="size-5" />
               <CardTitle>Paste History</CardTitle>
               <Badge variant="secondary">{pastes.length}</Badge>
             </div>

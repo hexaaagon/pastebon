@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FileText, Loader2 } from "lucide-react";
+import { BookDashed, Loader2 } from "lucide-react";
 
 import { useDrafts } from "@/lib/storage/hooks";
 import { store } from "@/lib/store";
@@ -112,7 +112,7 @@ export default function DraftsPage() {
         <Empty>
           <EmptyHeader>
             <EmptyMedia variant="icon">
-              <FileText />
+              <BookDashed />
             </EmptyMedia>
             <EmptyTitle>No drafts yet</EmptyTitle>
             <EmptyDescription>
@@ -125,7 +125,7 @@ export default function DraftsPage() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <FileText className="size-5" />
+              <BookDashed className="size-5" />
               <CardTitle>Your Drafts</CardTitle>
               <Badge variant="secondary">{drafts.length}</Badge>
             </div>

@@ -1,18 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { BookOpen, ScrollText, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 
 import { NavMain } from "@/components/sidebar/nav-main";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -21,21 +20,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { UnsavedGateway } from "@/components/unsaved-gateway";
-
-const data = {
-  navMain: [
-    {
-      name: "Paste",
-      url: "/",
-      icon: ScrollText,
-    },
-    {
-      name: "Docs",
-      url: "/docs",
-      icon: BookOpen,
-    },
-  ],
-};
 
 export function AppSidebar({
   type,
