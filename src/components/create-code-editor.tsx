@@ -338,8 +338,15 @@ export function CreateCodeEditor({
           pasteId: data.id,
           code,
           language: lang === "dynamic" ? language : lang,
+          title:
+            draftTitle && draftTitle.trim().length > 0
+              ? draftTitle.trim()
+              : undefined,
           adminPassword: data.password,
         });
+
+        // notify the page to refresh the pastes list
+        window.dispatchEvent(new CustomEvent("pasteSaved"));
 
         // clear all drafts that match the submitted code
         const allDrafts = codeStorage.drafts.getAllSorted();

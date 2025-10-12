@@ -203,6 +203,7 @@ export function usePasteHistory() {
       pasteId: string;
       code: string;
       language: string;
+      title?: string;
       adminPassword: string;
       expiresAt?: number;
       maxViews?: number;

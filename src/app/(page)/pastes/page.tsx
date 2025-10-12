@@ -1,8 +1,29 @@
 ﻿"use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ExternalLink, Loader2 } from "lucide-react";
 
-import { Loader2 } from "lucide-react";
+import { usePasteHistory } from "@/lib/storage/hooks";
+import { PasteItem } from "@/components/paste-item";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Empty,
   EmptyDescription,
@@ -10,14 +31,34 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { PastesList } from "@/components/pastes-list";
 
 export default function PasteHistoryPage() {
   const [mounted, setMounted] = useState(false);
+  const { pastes, deletePaste, refresh } = usePasteHistory();
+  const [deleteConfirmationDialog, setDeleteConfirmationDialog] = useState<{
+    action: () => void;
+  } | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // listen for paste saved events
+  useEffect(() => {
+    const handlePasteSaved = () => refresh();
+    window.addEventListener("pasteSaved", handlePasteSaved);
+    return () => window.removeEventListener("pasteSaved", handlePasteSaved);
+  }, [refresh]);
+
+  const handleViewPaste = (url: string) => {
+    router.push(url);
+  };
+
+  const handleDeletePaste = (pasteId: string) => {
+    deletePaste(pasteId);
+    setDeleteConfirmationDialog(null);
+  };
 
   return (
     <main className="p-8 px-10">
@@ -60,9 +101,73 @@ export default function PasteHistoryPage() {
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
+      ) : pastes.length === 0 ? (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <ExternalLink />
+            </EmptyMedia>
+            <EmptyTitle>No pastes yet</EmptyTitle>
+            <EmptyDescription>
+              Your paste history will appear here. Create some pastes to see
+              them listed.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       ) : (
-        <PastesList showEmpty />
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <ExternalLink className="size-5" />
+              <CardTitle>Paste History</CardTitle>
+              <Badge variant="secondary">{pastes.length}</Badge>
+            </div>
+            <CardDescription>
+              All your created pastes are stored locally in your browser
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {pastes.map((paste) => (
+                <PasteItem
+                  key={paste.id}
+                  paste={paste}
+                  onView={handleViewPaste}
+                  onDelete={(id) =>
+                    setDeleteConfirmationDialog({
+                      action: () => handleDeletePaste(id),
+                    })
+                  }
+                />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={!!deleteConfirmationDialog}
+        onOpenChange={(open) => !open && setDeleteConfirmationDialog(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this
+              paste from your browser history.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deleteConfirmationDialog?.action()}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </main>
   );
 }

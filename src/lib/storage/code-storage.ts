@@ -30,6 +30,7 @@ export interface CodeDraft extends BaseCodeItem {
 export interface SubmittedPaste extends BaseCodeItem {
   type: "paste";
   pasteId: string;
+  title?: string;
   adminPassword: string;
   url: string;
   expiresAt?: number;
@@ -269,6 +270,7 @@ export class PasteStorage extends BaseCodeStorage<SubmittedPaste> {
     pasteId: string;
     code: string;
     language: string;
+    title?: string;
     adminPassword: string;
     expiresAt?: number;
     maxViews?: number;
@@ -282,6 +284,7 @@ export class PasteStorage extends BaseCodeStorage<SubmittedPaste> {
       pasteId: params.pasteId,
       code: params.code,
       language: params.language,
+      title: params.title,
       adminPassword: params.adminPassword,
       url: `/paste/${params.pasteId}`,
       expiresAt: params.expiresAt,
