@@ -5,7 +5,7 @@ import { createCode } from "@/lib/actions/code";
 import { createSchema } from "@/lib/constants";
 
 export async function PUT(req: Request) {
-  let formData: typeof createSchema._type;
+  let formData: z.infer<typeof createSchema>;
   const ip = ipAddress(req);
 
   try {
