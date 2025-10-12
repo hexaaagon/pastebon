@@ -2,7 +2,14 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
-import { Download, Hammer, Loader2, Sparkles, Upload } from "lucide-react";
+import {
+  Download,
+  Hammer,
+  Loader2,
+  Sparkles,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -41,6 +48,8 @@ export default function SettingsPage() {
   const [importDialogOpen, setImportDialogOpen] = useState<boolean>(false);
   const [lastWarningImportOpen, setLastWarningImportOpen] =
     useState<boolean>(false);
+  const [clearDataDialogOpen, setClearDataDialogOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);
@@ -66,6 +75,20 @@ export default function SettingsPage() {
         }
       },
       error: (err) => `Error importing data: ${err.message}`,
+    });
+  }
+
+  async function clearData() {
+    const { clearData } = await import("@/lib/actions/data-export");
+
+    const result = clearData("all");
+
+    toast.promise(result, {
+      loading: "Clearing all data...",
+      success: (res) => {
+        return `Successfully deleted ${res.draftsDeleted} drafts and ${res.pastesDeleted} pastes.`;
+      },
+      error: (err) => `Error clearing data: ${err.message}`,
     });
   }
 
@@ -206,6 +229,14 @@ export default function SettingsPage() {
             <Download />
             Export Data
           </Button>
+          <Button
+            size="lg"
+            variant="destructive"
+            onClick={() => setClearDataDialogOpen(true)}
+          >
+            <Trash2 />
+            Delete Data
+          </Button>
         </section>
       </div>
       <Dialog
@@ -341,7 +372,7 @@ export default function SettingsPage() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you absolutely lutely mukely sure?</DialogTitle>
+            <DialogTitle>Are you absolutely mukely sure?</DialogTitle>
             <DialogDescription>
               This action cannot be undone. We highly recommend you to export
               your data before proceeding.
@@ -367,6 +398,36 @@ export default function SettingsPage() {
               >
                 Yes, {importMode === "replace" && "Replace"}
                 {importMode === "merge" && "Merge"} Data
+              </Button>
+            </DialogFooter>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={clearDataDialogOpen} onOpenChange={setClearDataDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely mukely sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. We highly recommend you to export
+              your data before deleting all of your local data.
+            </DialogDescription>
+            <DialogFooter className="flex items-center justify-end space-x-2">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setClearDataDialogOpen(false);
+                }}
+              >
+                Nevermind, Cancel it
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  setClearDataDialogOpen(false);
+                  clearData();
+                }}
+              >
+                Yes, Clear Data
               </Button>
             </DialogFooter>
           </DialogHeader>

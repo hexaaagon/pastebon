@@ -176,10 +176,12 @@ export function getDataStatistics(): {
 /**
  * Clear all locally stored data
  */
-export function clearData(type: "all" | "drafts" | "pastes" = "all"): {
+export async function clearData(
+  type: "all" | "drafts" | "pastes" = "all",
+): Promise<{
   draftsDeleted: number;
   pastesDeleted: number;
-} {
+}> {
   let draftsDeleted = 0;
   let pastesDeleted = 0;
 
