@@ -92,7 +92,7 @@ async function EnableSupabaseCron(
 
   const file: boolean[] = await Promise.all(
     files.map(async (file) => {
-      let script = await fs.readFile(file, "utf8");
+      let script = (await fs.readFile(file, "utf8")) as string;
 
       if (!script) return false;
 
