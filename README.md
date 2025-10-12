@@ -21,3 +21,19 @@ Paste thing you want like code, log, and error with this bin.
 ## 🚀 Website
 
 https://pastebon.hexaa.lol/
+
+## Special Thanks to
+
+<div>
+  <a href="https://siege.hackclub.com/?ref=432">
+    <img src="https://kidshackathon.educourse.id/images/LogoHackaton.png" alt="KidsHackathon 2025 Logo" height="48"></img>
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://siege.hackclub.com/?ref=432">
+    <img src="https://siege.hackclub.com/assets/logo-55998110.webp" alt="Hack Club Logo" height="48"></img>
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://hackclub.com">
+    <img src="https://assets.hackclub.com/flag-standalone.svg" alt="Hack Club Logo" height="48"></img>
+  </a>
+</div>
