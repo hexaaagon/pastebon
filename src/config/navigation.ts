@@ -1,4 +1,4 @@
-import type { MainNavItem } from "@/types/nav";
+import type { MainNavItem } from "@/shared/types/nav";
 import { BookCopy, BookDashed, BookOpen, ScrollText } from "lucide-react";
 
 export interface NavConfig {

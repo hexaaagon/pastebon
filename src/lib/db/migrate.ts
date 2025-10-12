@@ -2,7 +2,7 @@ import { type PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-import type { Database } from "@/types/database";
+import type { Database } from "@/shared/types/database";
 import postgres from "postgres";
 
 import { createServiceServer } from "@/lib/supabase/service-server";
@@ -55,7 +55,7 @@ const runMigrate = async () => {
 
 async function checkExtensions(
   db: PostgresJsDatabase,
-  supabase: SupabaseClient<Database>,
+  _supabase: SupabaseClient<Database>,
 ) {
   const checkPgNetQuery =
     "SELECT * FROM pg_available_extensions WHERE name = 'pg_net' AND installed_version IS NOT NULL";
@@ -84,7 +84,7 @@ async function checkExtensions(
 
 async function EnableSupabaseCron(
   db: PostgresJsDatabase,
-  supabase: SupabaseClient<Database>,
+  _supabase: SupabaseClient<Database>,
 ) {
   const files = (await glob(`src/lib/db/scripts/crons/*.sql`)).map((filePath) =>
     path.resolve(filePath),
@@ -113,7 +113,7 @@ async function EnableSupabaseCron(
         );
         await db.execute(script);
       } catch (e) {
-        console.log(file, `Error while enabling ${args.slice(-1)}: ` + e);
+        console.log(file, `Error while enabling ${args.slice(-1)}: ${e}`);
 
         return false;
       }

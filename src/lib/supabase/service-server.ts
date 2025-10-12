@@ -1,4 +1,4 @@
-import { Database } from "@/types/database";
+import type { Database } from "@/shared/types/database";
 import { createClient } from "@supabase/supabase-js";
 
 /**
